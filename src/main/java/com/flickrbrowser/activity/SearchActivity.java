@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import com.flickrbrowser.R;
-import com.flickrbrowser.util.BackgroundTask;
+import com.flickrbrowser.util.BackgroundHttpGet;
+import com.flickrbrowser.util.FlickrRequestBuilder;
 import com.flickrbrowser.util.ImageResult;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.params.HttpParams;
+import com.flickrbrowser.util.Location;
+
+import java.net.URISyntaxException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +22,7 @@ import org.apache.http.params.HttpParams;
  * To change this template use File | Settings | File Templates.
  */
 public class SearchActivity extends ListActivity {
-    private BackgroundTask restClient;
+    private BackgroundHttpGet restClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class SearchActivity extends ListActivity {
                 this, // Context.
                 android.R.id.list);
         setListAdapter(adapter);
-        restClient = new BackgroundTask((ArrayAdapter)adapter);
+        restClient = new BackgroundHttpGet((ArrayAdapter)adapter);
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
@@ -42,29 +44,18 @@ public class SearchActivity extends ListActivity {
     }
 
     private void doMySearch(String userQuery) {
-        restClient.execute(composeQueryString(userQuery));
+        try {
+            restClient.execute(FlickrRequestBuilder.createRequest(userQuery, getCurrentLocation()));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
-    private HttpGet composeQueryString(String userQuery) {
-        String base = "http://api.flickr.com/services/rest/";
-        String method = "flickr.photos.search";
-        String apiKey = "67cddab5d85093d72d9b4ac37358838b";
-        String apiSig = "b985911f2c4488d8792b9ee67e32d93f";
-        Double lat = 44.813019;
-        Double lon = 11.757689;
-        int radius = 10;
-        String format = "rest";
-        HttpGet get = new HttpGet(base);
-        HttpParams params = get.getParams();
-        params.setParameter("method", method);
-        params.setParameter("api_key", apiKey);
-        params.setParameter("api_sig", apiSig);
-        params.setParameter("format", format);
-        params.setDoubleParameter("lat", lat);
-        params.setDoubleParameter("lon", lon);
-        params.setIntParameter("radius", radius);
-        params.setParameter("text", userQuery);
-        get.setParams(params);
-        return get;
+    private Location getCurrentLocation() {
+        Location loc = new Location();
+        loc.lat = 44.813019;
+        loc.lon =  11.757689;
+        loc.radius = 10;
+        return loc;
     }
 }

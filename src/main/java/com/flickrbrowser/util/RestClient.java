@@ -1,7 +1,5 @@
 package com.flickrbrowser.util;
 
-import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,15 +15,10 @@ import java.io.InputStream;
  * Created with IntelliJ IDEA.
  * User: Bif
  * Date: 2/25/14
- * Time: 10:18 PM
+ * Time: 10:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BackgroundTask extends AsyncTask<HttpGet, Void, String> {
-    private ArrayAdapter<String> adapter;
-
-    public BackgroundTask(ArrayAdapter<String> adapter) {
-        this.adapter = adapter;
-    }
+public class RestClient {
 
     protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
         InputStream in = entity.getContent();
@@ -39,26 +32,17 @@ public class BackgroundTask extends AsyncTask<HttpGet, Void, String> {
         return out.toString();
     }
 
-
-    @Override
-    protected String doInBackground(HttpGet... params) {
+    public String doRequest(HttpGet httpGet) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
         String text = null;
         try {
-            HttpResponse response = httpClient.execute(params[0], localContext);
+            HttpResponse response = httpClient.execute(httpGet, localContext);
             HttpEntity entity = response.getEntity();
             text = getASCIIContentFromEntity(entity);
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
         return text;
-    }
-
-
-    protected void onPostExecute(String results) {
-        if (results!=null) {
-            adapter.add(results);
-        }
     }
 }
