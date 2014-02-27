@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import com.flickrbrowser.util.RestClient;
 import org.apache.http.client.methods.HttpGet;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Bif
@@ -12,9 +15,9 @@ import org.apache.http.client.methods.HttpGet;
  * To change this template use File | Settings | File Templates.
  */
 public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
-
-    public BackgroundHttpGet() {
-
+    private FlickrXmlParser parser;
+    public BackgroundHttpGet() throws ParserConfigurationException {
+        parser = new FlickrXmlParser();
     }
 
     @Override
@@ -26,7 +29,8 @@ public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
 
     protected void onPostExecute(String results) {
         if (results!=null) {
-            System.out.println(results);
+            List<PhotoResult> photos = parser.extractPhotoList(results);
+
         }
     }
 }

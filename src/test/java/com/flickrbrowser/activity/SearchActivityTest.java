@@ -24,6 +24,6 @@ public class SearchActivityTest {
     public void canSearch() throws Exception {
         SearchActivity activity = Robolectric.buildActivity(SearchActivity.class).create().get();
         Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
-        activity.doMySearch("ferrara");
+        activity.doSearch("ferrara");
     }
 }
