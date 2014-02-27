@@ -48,7 +48,7 @@ public class SearchActivity extends ListActivity {
 
     protected void doMySearch(String userQuery) {
         try {
-            restClient.execute(FlickrRequestBuilder.createRequest(userQuery, getCurrentLocation()));
+            restClient.execute(FlickrRequestBuilder.createRequest(userQuery, getCurrentLocation(), 1));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

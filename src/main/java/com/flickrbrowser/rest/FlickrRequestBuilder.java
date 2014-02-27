@@ -29,17 +29,22 @@ public abstract class FlickrRequestBuilder {
     private static final String apiKey = "b2990b6dd1749db8c7351de9decd46a0";
     private static final String format = "rest";
     private static final String additionalFields = "description";
+    private static final int resultsPerPage = 40;
 
-    public static HttpGet createRequest(String userQuery, Location location) throws URISyntaxException {
+    public static HttpGet createRequest(String userQuery, Location location, int page) throws URISyntaxException {
         List<NameValuePair> qparams = new ArrayList<NameValuePair>();
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.METHOD, method));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.API_KEY, apiKey));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.FORMAT, format));
-        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LATITUDE, location.lat.toString()));
-        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LONGITUDE, location.lon.toString()));
-        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.RADIUS, String.valueOf(location.radius)));
+        if(location != null) {
+            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LATITUDE, location.lat.toString()));
+            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LONGITUDE, location.lon.toString()));
+            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.RADIUS, String.valueOf(location.radius)));
+        }
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.QUERY_TEXT, userQuery));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.EXTRAS, additionalFields));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.PAGE_NUMBER, String.valueOf(page)));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.RESULTS_PER_PAGE, String.valueOf(resultsPerPage)));
         URI uri = URIUtils.createURI(protocol, host, port, path, URLEncodedUtils.format(qparams, "UTF-8"), null);
         HttpGet get = new HttpGet(uri);
         return get;

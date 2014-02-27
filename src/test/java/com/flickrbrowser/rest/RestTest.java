@@ -42,9 +42,16 @@ public class RestTest {
     @Test
     public void canQueryFlickr() throws URISyntaxException {
         RestClient client = new RestClient();
-        HttpGet request = FlickrRequestBuilder.createRequest("ferrara", getTestLocation());
+        HttpGet request = FlickrRequestBuilder.createRequest("ferrara", getTestLocation(), 1);
         String response = client.doRequest(request);
-        System.out.println(response);
+        Assert.assertTrue(response.substring(0, 100).contains("rsp stat=\"ok\""));
+    }
+
+    @Test
+    public void queryWorksEvenWithoutLocation() throws URISyntaxException {
+        RestClient client = new RestClient();
+        HttpGet request = FlickrRequestBuilder.createRequest("ferrara", null, 1);
+        String response = client.doRequest(request);
         Assert.assertTrue(response.substring(0, 100).contains("rsp stat=\"ok\""));
     }
 

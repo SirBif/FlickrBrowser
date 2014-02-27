@@ -30,5 +30,7 @@ public abstract class FlickrBrowserConstants {
         public static final String RADIUS = "radius";
         public static final String QUERY_TEXT = "text";
         public static final String EXTRAS = "extras";
+        public static final String PAGE_NUMBER = "page";
+        public static final String RESULTS_PER_PAGE = "per_page";
     }
 }
