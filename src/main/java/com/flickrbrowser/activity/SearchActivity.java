@@ -4,13 +4,12 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.view.View;
+import android.widget.*;
 import com.flickrbrowser.R;
-import com.flickrbrowser.util.BackgroundHttpGet;
-import com.flickrbrowser.util.FlickrRequestBuilder;
-import com.flickrbrowser.util.ImageResult;
-import com.flickrbrowser.util.Location;
+import com.flickrbrowser.util.*;
+import com.flickrbrowser.rest.BackgroundHttpGet;
+import com.flickrbrowser.rest.FlickrRequestBuilder;
 
 import java.net.URISyntaxException;
 
@@ -29,11 +28,15 @@ public class SearchActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        ListAdapter adapter = new ArrayAdapter<ImageResult>(
-                this, // Context.
-                android.R.id.list);
-        setListAdapter(adapter);
-        restClient = new BackgroundHttpGet((ArrayAdapter)adapter);
+        restClient = new BackgroundHttpGet();
+        ListView listview = (ListView) findViewById(android.R.id.list);
+        listview.setAdapter(new ImageAdapter(this));
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(SearchActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
@@ -43,11 +46,11 @@ public class SearchActivity extends ListActivity {
         }
     }
 
-    private void doMySearch(String userQuery) {
+    protected void doMySearch(String userQuery) {
         try {
             restClient.execute(FlickrRequestBuilder.createRequest(userQuery, getCurrentLocation()));
         } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 

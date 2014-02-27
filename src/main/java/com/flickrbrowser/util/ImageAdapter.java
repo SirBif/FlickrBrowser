@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import com.flickrbrowser.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,7 +51,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     // references to our images
-    private Integer[] mThumbIds = { /*
+    private Integer[] mThumbIds = {
             R.drawable.ic_launcher,
             R.drawable.ic_launcher,
             R.drawable.ic_launcher,
@@ -58,6 +59,6 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.ic_launcher,
             R.drawable.ic_launcher,
             R.drawable.ic_launcher,
-            R.drawable.ic_launcher   */
+            R.drawable.ic_launcher
     };
 }

@@ -1,5 +1,7 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.rest;
 
+import com.flickrbrowser.util.FlickrBrowserConstants;
+import com.flickrbrowser.util.Location;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
@@ -26,26 +28,18 @@ public abstract class FlickrRequestBuilder {
     private static final String method = "flickr.photos.search";
     private static final String apiKey = "b2990b6dd1749db8c7351de9decd46a0";
     private static final String format = "rest";
-
-    private abstract class FlickrRestParameters {
-        private static final String METHOD = "method";
-        private static final String API_KEY = "api_key";
-        private static final String FORMAT = "format";
-        private static final String LATITUDE = "lat";
-        private static final String LONGITUDE = "lon";
-        private static final String RADIUS = "radius";
-        private static final String QUERY_TEXT = "text";
-    }
+    private static final String additionalFields = "description";
 
     public static HttpGet createRequest(String userQuery, Location location) throws URISyntaxException {
         List<NameValuePair> qparams = new ArrayList<NameValuePair>();
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.METHOD, method));
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.API_KEY, apiKey));
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.FORMAT, format));
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.LATITUDE, location.lat.toString()));
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.LONGITUDE, location.lon.toString()));
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.RADIUS, String.valueOf(location.radius)));
-        qparams.add(new BasicNameValuePair(FlickrRestParameters.QUERY_TEXT, userQuery));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.METHOD, method));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.API_KEY, apiKey));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.FORMAT, format));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LATITUDE, location.lat.toString()));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LONGITUDE, location.lon.toString()));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.RADIUS, String.valueOf(location.radius)));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.QUERY_TEXT, userQuery));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.EXTRAS, additionalFields));
         URI uri = URIUtils.createURI(protocol, host, port, path, URLEncodedUtils.format(qparams, "UTF-8"), null);
         HttpGet get = new HttpGet(uri);
         return get;

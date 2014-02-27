@@ -7,9 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-
-import java.io.IOException;
-import java.io.InputStream;
+import org.apache.http.util.EntityUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,19 +17,6 @@ import java.io.InputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class RestClient {
-
-    protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
-        InputStream in = entity.getContent();
-        StringBuffer out = new StringBuffer();
-        int n = 1;
-        while (n>0) {
-            byte[] b = new byte[4096];
-            n =  in.read(b);
-            if (n>0) out.append(new String(b, 0, n));
-        }
-        return out.toString();
-    }
-
     public String doRequest(HttpGet httpGet) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
@@ -39,7 +24,7 @@ public class RestClient {
         try {
             HttpResponse response = httpClient.execute(httpGet, localContext);
             HttpEntity entity = response.getEntity();
-            text = getASCIIContentFromEntity(entity);
+            text = EntityUtils.toString(entity);
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }

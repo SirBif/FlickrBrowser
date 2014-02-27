@@ -1,7 +1,7 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.rest;
 
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
+import com.flickrbrowser.util.RestClient;
 import org.apache.http.client.methods.HttpGet;
 
 /**
@@ -12,10 +12,9 @@ import org.apache.http.client.methods.HttpGet;
  * To change this template use File | Settings | File Templates.
  */
 public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
-    private ArrayAdapter<String> adapter;
 
-    public BackgroundHttpGet(ArrayAdapter<String> adapter) {
-        this.adapter = adapter;
+    public BackgroundHttpGet() {
+
     }
 
     @Override
@@ -27,7 +26,7 @@ public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
 
     protected void onPostExecute(String results) {
         if (results!=null) {
-            adapter.add(results);
+            System.out.println(results);
         }
     }
 }
