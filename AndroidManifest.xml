@@ -20,5 +20,7 @@
             <meta-data android:name="android.app.searchable"
                        android:resource="@xml/searchable"/>
         </activity>
+        <provider android:name=".util.SearchHistory"
+                  android:authorities="com.flickrbrowser.util.SearchHistory" />
     </application>
 </manifest>

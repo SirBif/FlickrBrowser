@@ -18,11 +18,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
-    private FlickrXmlParser parser;
-    ImageAdapter adapter;
-    public BackgroundHttpGet(SearchActivity searchActivity) throws ParserConfigurationException {
-        parser = new FlickrXmlParser();
-        adapter = searchActivity.getImageAdapter();
+    private SearchResult searchResults;
+    public BackgroundHttpGet(SearchResult results) {
+        searchResults = results;
     }
 
     @Override
@@ -32,11 +30,9 @@ public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
     }
 
 
-    protected void onPostExecute(String results) {
-        if (results!=null) {
-            List<PhotoResult> photos = parser.extractPhotoList(results);
-            adapter.addPhotoResults(photos);
-            adapter.notifyDataSetChanged();
+    protected void onPostExecute(String response) {
+        if (response!=null) {
+            searchResults.parseResponse(response);
         }
     }
 }

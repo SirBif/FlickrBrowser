@@ -4,9 +4,11 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.view.View;
 import android.widget.*;
 import com.flickrbrowser.R;
+import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.*;
 import com.flickrbrowser.rest.BackgroundHttpGet;
 import com.flickrbrowser.rest.FlickrRequestBuilder;
@@ -23,17 +25,23 @@ import java.net.URISyntaxException;
  */
 public class SearchActivity extends ListActivity implements AbsListView.OnScrollListener {
     private ImageAdapter imageAdapter = new ImageAdapter(this);
-    private int currentPage = 0;
-    private String currentQuery;
+    private SearchRecentSuggestions suggestions;
+    private SearchResult searchResult = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
+        suggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
         getListView().setOnScrollListener(this);
         configureListView();
         handleIntent(getIntent());
+
+        try {
+            searchResult = new SearchResult("", imageAdapter);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,9 +60,7 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
         if (scrollState == SCROLL_STATE_IDLE) {
             int threshold = 5;
             if (listView.getLastVisiblePosition() >= listView.getCount() - 1 - threshold) {
-                currentPage++;
-                //load more list items:
-                loadElements(currentPage);
+                searchResult.loadNextPage();
             }
         }
     }
@@ -63,22 +69,15 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
         return imageAdapter;
     }
 
-    private void loadElements(int currentPage) {
+    protected void doSearch(String query) {
+        suggestions.saveRecentQuery(query, null);
+        imageAdapter.clearPhotos();
         try {
-            BackgroundHttpGet restClient = new BackgroundHttpGet(this);
-            restClient.execute(FlickrRequestBuilder.createRequest(currentQuery, getCurrentLocation(), currentPage));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            searchResult = new SearchResult(query, imageAdapter);
+            searchResult.loadNextPage();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-    }
-
-    protected void doSearch(String query) {
-        imageAdapter.clearPhotos();
-        currentQuery = query;
-        currentPage = 1;
-        loadElements(currentPage);
     }
 
     private void handleIntent(Intent intent) {
@@ -96,13 +95,5 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
                 Toast.makeText(SearchActivity.this, "" + position, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private Location getCurrentLocation() {
-        Location loc = new Location();
-        loc.lat = 44.813019;
-        loc.lon =  11.757689;
-        loc.radius = 10;
-        return loc;
     }
 }

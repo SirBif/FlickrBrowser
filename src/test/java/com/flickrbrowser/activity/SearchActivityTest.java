@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import com.flickrbrowser.rest.RestTest;
+import com.flickrbrowser.rest.SearchResult;
+import com.flickrbrowser.util.ImageAdapter;
 import junit.framework.Assert;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -27,7 +29,7 @@ public class SearchActivityTest {
     }
 
     @org.junit.Test
-    public void searchIntentCanBeReceived() throws Exception {
+     public void searchIntentCanBeReceived() throws Exception {
         SearchActivity activity = Robolectric.buildActivity(SearchActivity.class).create().get();
         Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
         Intent intent = new Intent(Intent.ACTION_SEARCH);

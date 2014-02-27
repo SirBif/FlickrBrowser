@@ -19,6 +19,9 @@ public abstract class FlickrBrowserConstants {
         public static final String DESCRIPTION = "description";
 
         public static final String PHOTO_ATTRIBUTE_NAME = "photo";
+        public static final String PAGES = "pages";
+
+        public static final String PHOTOS_ATTRIBUTE_NAME = "photos";
     }
 
     public abstract class RestParameters {

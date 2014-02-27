@@ -43,10 +43,12 @@ public class ImageAdapter extends BaseAdapter {
 
     public void addPhotoResults(List<PhotoResult> itemsToAdd) {
         photos.addAll(itemsToAdd);
+        notifyDataSetChanged();
     }
 
     public void clearPhotos() {
         photos.clear();
+        notifyDataSetChanged();
     }
 
     // create a new ImageView for each item referenced by the Adapter

@@ -49,4 +49,23 @@ public class FlickrXmlParser {
         }
         return photoList;
     }
+
+    public int extractNumberOfPages(String xmlResponse) {
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xmlResponse));
+
+        try {
+            Document doc = documentBuilder.parse(is);
+            NodeList nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTOS_ATTRIBUTE_NAME);
+            if(nodes.getLength() == 1) {
+                Element element = (Element) nodes.item(0);
+                return Integer.valueOf(element.getAttribute(FlickrBrowserConstants.XmlAttributes.PAGES));
+            }
+        } catch (SAXException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return 0;
+    }
 }
