@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.flickrbrowser.R;
 import com.flickrbrowser.util.*;
@@ -24,6 +23,7 @@ import java.net.URISyntaxException;
  */
 public class SearchActivity extends ListActivity implements AbsListView.OnScrollListener {
     private BackgroundHttpGet restClient;
+    private ImageAdapter imageAdapter = new ImageAdapter(this);
     private int currentPage = 0;
     private String currentQuery;
 
@@ -33,9 +33,9 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
         setContentView(R.layout.main);
 
         try {
-            restClient = new BackgroundHttpGet();
+            restClient = new BackgroundHttpGet(this);
             getListView().setOnScrollListener(this);
-            configureListClicks();
+            configureListView();
             handleIntent();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -60,6 +60,10 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
         }
     }
 
+    public ImageAdapter getImageAdapter() {
+        return imageAdapter;
+    }
+
     private void loadElements(int currentPage) {
         try {
             restClient.execute(FlickrRequestBuilder.createRequest(currentQuery, getCurrentLocation(), currentPage));
@@ -81,9 +85,9 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
         }
     }
 
-    private void configureListClicks() {
+    private void configureListView() {
         ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(new ImageAdapter(this));
+        listView.setAdapter(imageAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

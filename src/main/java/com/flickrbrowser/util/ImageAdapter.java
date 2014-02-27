@@ -6,7 +6,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import com.flickrbrowser.R;
+import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.rest.PhotoSize;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,21 +22,27 @@ import com.flickrbrowser.R;
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
+    private List<PhotoResult> photos = new ArrayList<PhotoResult>();
+    private ImageLoader imageLoader = ImageLoader.getInstance();
 
     public ImageAdapter(Context c) {
         mContext = c;
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return photos.size();
     }
 
     public Object getItem(int position) {
-        return null;
+        return photos.get(position);
     }
 
     public long getItemId(int position) {
-        return 0;
+        return position;
+    }
+
+    public void addPhotoResults(List<PhotoResult> itemsToAdd) {
+        photos.addAll(itemsToAdd);
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -45,20 +56,7 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-
-        imageView.setImageResource(mThumbIds[position]);
+        imageLoader.displayImage(photos.get(position).getUrl(PhotoSize.THUMBNAIL), imageView);
         return imageView;
     }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher
-    };
 }

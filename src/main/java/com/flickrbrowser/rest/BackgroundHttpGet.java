@@ -1,6 +1,9 @@
 package com.flickrbrowser.rest;
 
 import android.os.AsyncTask;
+import android.widget.ListAdapter;
+import com.flickrbrowser.activity.SearchActivity;
+import com.flickrbrowser.util.ImageAdapter;
 import com.flickrbrowser.util.RestClient;
 import org.apache.http.client.methods.HttpGet;
 
@@ -16,8 +19,10 @@ import java.util.List;
  */
 public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
     private FlickrXmlParser parser;
-    public BackgroundHttpGet() throws ParserConfigurationException {
+    ImageAdapter adapter;
+    public BackgroundHttpGet(SearchActivity searchActivity) throws ParserConfigurationException {
         parser = new FlickrXmlParser();
+        adapter = searchActivity.getImageAdapter();
     }
 
     @Override
@@ -30,7 +35,8 @@ public class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
     protected void onPostExecute(String results) {
         if (results!=null) {
             List<PhotoResult> photos = parser.extractPhotoList(results);
-
+            adapter.addPhotoResults(photos);
+            adapter.notifyDataSetChanged();
         }
     }
 }
