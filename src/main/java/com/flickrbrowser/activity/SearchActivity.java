@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
  * To change this template use File | Settings | File Templates.
  */
 public class SearchActivity extends ListActivity implements AbsListView.OnScrollListener {
-    private BackgroundHttpGet restClient;
     private ImageAdapter imageAdapter = new ImageAdapter(this);
     private int currentPage = 0;
     private String currentQuery;
@@ -32,14 +31,14 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        try {
-            restClient = new BackgroundHttpGet(this);
-            getListView().setOnScrollListener(this);
-            configureListView();
-            handleIntent();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
+        getListView().setOnScrollListener(this);
+        configureListView();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        handleIntent(intent);
     }
 
     @Override
@@ -66,20 +65,23 @@ public class SearchActivity extends ListActivity implements AbsListView.OnScroll
 
     private void loadElements(int currentPage) {
         try {
+            BackgroundHttpGet restClient = new BackgroundHttpGet(this);
             restClient.execute(FlickrRequestBuilder.createRequest(currentQuery, getCurrentLocation(), currentPage));
         } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
     protected void doSearch(String query) {
+        imageAdapter.clearPhotos();
         currentQuery = query;
         currentPage = 1;
         loadElements(currentPage);
     }
 
-    private void handleIntent() {
-        Intent intent = getIntent();
+    private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             doSearch(intent.getStringExtra(SearchManager.QUERY));
         }

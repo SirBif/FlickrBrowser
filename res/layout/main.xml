@@ -4,11 +4,6 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Test layout"
-            android:autoText="true" android:id="@+id/textView"/>
     <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

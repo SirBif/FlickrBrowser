@@ -45,6 +45,10 @@ public class ImageAdapter extends BaseAdapter {
         photos.addAll(itemsToAdd);
     }
 
+    public void clearPhotos() {
+        photos.clear();
+    }
+
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
@@ -56,7 +60,9 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        imageLoader.displayImage(photos.get(position).getUrl(PhotoSize.THUMBNAIL), imageView);
+        if(position < photos.size()) {
+            imageLoader.displayImage(photos.get(position).getUrl(PhotoSize.THUMBNAIL), imageView);
+        }
         return imageView;
     }
 }
