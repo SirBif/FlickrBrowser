@@ -14,14 +14,14 @@ public class FlickrBrowserApp extends Application {
         //  displayImage(...) call if no options will be passed to this method
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
             .cacheOnDisc(true)
-            .cacheInMemory(true)
+            .cacheInMemory(false)
             .showImageOnLoading(R.drawable.ic_launcher)
             .build();
 
         // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
             .defaultDisplayImageOptions(defaultOptions)
-            .discCacheFileCount(100)
+            .discCacheFileCount(300)
             .build();
         ImageLoader.getInstance().init(config);
     }

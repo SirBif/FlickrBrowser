@@ -13,7 +13,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 import com.flickrbrowser.R;
+import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.rest.PhotoSize;
 import com.flickrbrowser.rest.SearchResult;
+import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.ImageAdapter;
 import com.flickrbrowser.util.SearchHistory;
 
@@ -111,10 +114,15 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     protected void configureListView() {
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(imageAdapter);
+        final Context ctx = this;
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(Search.this, "" + position, Toast.LENGTH_SHORT).show();
+                PhotoResult photo = (PhotoResult) imageAdapter.getItem(position);
+                Intent newIntent = new Intent("display");
+                newIntent.putExtra(FlickrBrowserConstants.ParcelablePhoto, photo);
+                newIntent.setClass(ctx, Display.class);
+                startActivity(newIntent);
             }
         });
     }

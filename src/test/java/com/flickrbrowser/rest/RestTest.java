@@ -22,7 +22,17 @@ public class RestTest {
     public static final String okHttpResponse = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
             "<rsp stat=\"ok\">\n" +
             "<photos page=\"1\" pages=\"1\" perpage=\"250\" total=\"1\">\n" +
-            "    <photo id=\"1535647353\" owner=\"98545448@N00\" secret=\"e5b7537af5\" server=\"2371\" farm=\"3\" title=\"Airone rosso\" ispublic=\"1\" isfriend=\"0\" isfamily=\"0\" />\n" +
+            "    <photo id=\"1535647353\" owner=\"98545448@N00\" secret=\"e5b7537af5\" server=\"2371\" farm=\"3\" title=\"Airone rosso\" ispublic=\"1\" isfriend=\"0\" isfamily=\"0\">\n" +
+            "<description>airone</description>\n"+
+            "</photo>\n"+
+            "</photos>\n" +
+            "</rsp>";
+
+    public static final String okHttpResponseNoDesc = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
+            "<rsp stat=\"ok\">\n" +
+            "<photos page=\"1\" pages=\"1\" perpage=\"250\" total=\"1\">\n" +
+            "    <photo id=\"1535647353\" owner=\"98545448@N00\" secret=\"e5b7537af5\" server=\"2371\" farm=\"3\" title=\"Airone rosso\" ispublic=\"1\" isfriend=\"0\" isfamily=\"0\">\n" +
+            "</photo>\n"+
             "</photos>\n" +
             "</rsp>";
 
@@ -62,6 +72,23 @@ public class RestTest {
         Assert.assertEquals(1, photos.size());
         PhotoResult photo = photos.get(0);
         Assert.assertEquals("Airone rosso", photo.getTitle());
+    }
+
+    @Test
+     public void canParseDescription() throws ParserConfigurationException {
+        FlickrXmlParser parser = new FlickrXmlParser();
+        List<PhotoResult> photos = parser.extractPhotoList(okHttpResponse);
+        Assert.assertEquals(1, photos.size());
+        PhotoResult photo = photos.get(0);
+        Assert.assertEquals("airone", photo.getDescription());
+    }
+
+    @Test
+    public void parseDoesNotBreakWhenThereIsNoDescription() throws ParserConfigurationException {
+        FlickrXmlParser parser = new FlickrXmlParser();
+        List<PhotoResult> photos = parser.extractPhotoList(okHttpResponseNoDesc);
+        Assert.assertEquals(1, photos.size());
+        PhotoResult photo = photos.get(0);
     }
 
     @Test

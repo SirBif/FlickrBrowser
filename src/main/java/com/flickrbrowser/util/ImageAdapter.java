@@ -61,28 +61,23 @@ public class ImageAdapter extends BaseAdapter {
         RelativeLayout vi;
         vi = (RelativeLayout) inflater.inflate(R.layout.listrow, null);
 
-        TextView title = (TextView)vi.findViewById(R.id.title); // title
-        TextView desc = (TextView)vi.findViewById(R.id.description); // artist name
+        TextView title = (TextView)vi.findViewById(R.id.display_title); // title
+        TextView desc = (TextView)vi.findViewById(R.id.display_description); // artist name
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
 
         PhotoResult photo = photos.get(position);
 
         // Setting all values in listview
-        title.setText(photo.getTitle());
-        desc.setText(photo.getDescription());
+        title.setText(shortenString(photo.getTitle()));
+        desc.setText(shortenString(photo.getDescription()));
         imageLoader.displayImage(photo.getUrl(PhotoSize.THUMBNAIL), thumb_image);
-        /*
-        if (convertView == null) {  // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(0, 0, 0, 0);
-        } else {
-            imageView = (ImageView) convertView;
-        }
-        if(position < photos.size()) {
-            imageLoader.displayImage(photos.get(position).getUrl(PhotoSize.THUMBNAIL), imageView);
-        } */
         return vi;
+    }
+
+    private static String shortenString(String input) {
+        if(input != null && input.length() > 100) {
+            return input.substring(0, 100) + "...";
+        }
+        return input;
     }
 }

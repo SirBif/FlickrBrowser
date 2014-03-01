@@ -12,7 +12,9 @@ public enum PhotoSize {
     LARGE_SQUARE("q"),
     THUMBNAIL("t"),
     SMALL_240("m"),
-    SMALL_320("n")
+    SMALL_320("n"),
+    MEDIUM_640("z"),
+    MEDIUM_800("c")
     ;
 
     private PhotoSize(final String text) {

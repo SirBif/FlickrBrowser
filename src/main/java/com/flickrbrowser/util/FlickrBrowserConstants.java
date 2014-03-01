@@ -9,6 +9,7 @@ package com.flickrbrowser.util;
  */
 public abstract class FlickrBrowserConstants {
     public static final String TAG = "FlickrSearch";
+    public static final String ParcelablePhoto = "photo";
 
     public abstract class XmlAttributes {
         public static final String ID = "id";
@@ -17,7 +18,8 @@ public abstract class FlickrBrowserConstants {
         public static final String SERVER = "server";
         public static final String FARM = "farm";
         public static final String TITLE = "title";
-        public static final String DESCRIPTION = "description";
+
+        public static final String DESCRIPTION_ATTRIBUTE_NAME = "description";
 
         public static final String PHOTO_ATTRIBUTE_NAME = "photo";
         public static final String PAGES = "pages";
