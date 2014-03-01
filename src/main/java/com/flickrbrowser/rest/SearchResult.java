@@ -3,7 +3,7 @@ package com.flickrbrowser.rest;
 import android.util.Log;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.ImageAdapter;
-import com.flickrbrowser.util.Location;
+import com.flickrbrowser.util.SimpleLocation;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.net.URISyntaxException;
@@ -24,12 +24,14 @@ public class SearchResult implements IResponseListener {
     protected ImageAdapter imageAdapter;
     protected FlickrXmlParser parser;
     protected RequestManager reqManager = RequestManager.getInstance();
+    protected SimpleLocation queryLocation;
 
-    public SearchResult(String userQuery, ImageAdapter adapter) throws ParserConfigurationException {
+    public SearchResult(String userQuery, SimpleLocation location, ImageAdapter adapter) throws ParserConfigurationException {
         query = userQuery;
         currentPage = NO_PAGES_YET;
         numberOfPages = NO_PAGES_YET;
         imageAdapter = adapter;
+        queryLocation = location;
         parser = new FlickrXmlParser();
 
         imageAdapter.clearPhotos();
@@ -49,7 +51,7 @@ public class SearchResult implements IResponseListener {
 
     private void loadElements() {
         try {
-            reqManager.executeRequest(FlickrRequestBuilder.createRequest(query, getCurrentLocation(), currentPage), this);
+            reqManager.executeRequest(FlickrRequestBuilder.createRequest(query, queryLocation, currentPage), this);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -69,14 +71,6 @@ public class SearchResult implements IResponseListener {
             return true;
         }
         return false;
-    }
-
-    private Location getCurrentLocation() {
-        Location loc = new Location();
-        loc.lat = 44.813019;
-        loc.lon =  11.757689;
-        loc.radius = 10;
-        return loc;
     }
 
     public int getCurrentPage() {

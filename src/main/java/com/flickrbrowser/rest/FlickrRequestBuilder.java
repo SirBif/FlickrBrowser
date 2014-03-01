@@ -1,7 +1,8 @@
 package com.flickrbrowser.rest;
 
+import android.location.Location;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.util.Location;
+import com.flickrbrowser.util.SimpleLocation;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
@@ -30,16 +31,17 @@ public abstract class FlickrRequestBuilder {
     private static final String format = "rest";
     private static final String additionalFields = "description";
     private static final int resultsPerPage = 20;
+    private static final int radius = 10;
 
-    public static HttpGet createRequest(String userQuery, Location location, int page) throws URISyntaxException {
+    public static HttpGet createRequest(String userQuery, SimpleLocation location, int page) throws URISyntaxException {
         List<NameValuePair> qparams = new ArrayList<NameValuePair>();
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.METHOD, method));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.API_KEY, apiKey));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.FORMAT, format));
         if(location != null) {
-            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LATITUDE, location.lat.toString()));
-            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LONGITUDE, location.lon.toString()));
-            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.RADIUS, String.valueOf(location.radius)));
+            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LATITUDE, String.valueOf(location.getLatitude())));
+            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LONGITUDE,String.valueOf(location.getLongitude())));
+            qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.RADIUS, String.valueOf(radius)));
         }
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.QUERY_TEXT, userQuery));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.EXTRAS, additionalFields));

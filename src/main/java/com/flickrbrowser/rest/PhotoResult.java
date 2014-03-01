@@ -23,33 +23,8 @@ public class PhotoResult implements Parcelable{
     private String title;
     private String description;
 
-    public String getTitle() {
-        return title;
-    }
+    protected PhotoResult() {
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public PhotoResult(Element element) {
-        id = element.getAttribute(FlickrBrowserConstants.XmlAttributes.ID);
-        owner = element.getAttribute(FlickrBrowserConstants.XmlAttributes.OWNER);
-        secret = element.getAttribute(FlickrBrowserConstants.XmlAttributes.SECRET);
-        farm = element.getAttribute(FlickrBrowserConstants.XmlAttributes.FARM);
-        server = element.getAttribute(FlickrBrowserConstants.XmlAttributes.SERVER);
-        title = element.getAttribute(FlickrBrowserConstants.XmlAttributes.TITLE);
-
-        NodeList descriptions = element.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.DESCRIPTION_ATTRIBUTE_NAME);
-        if(descriptions.getLength() > 0) {
-            Node desc = descriptions.item(0);
-            if(desc.hasChildNodes()) {
-                description = descriptions.item(0).getFirstChild().getNodeValue();
-            }
-        }
     }
 
     public PhotoResult(Parcel in) {
@@ -98,5 +73,61 @@ public class PhotoResult implements Parcelable{
             return new PhotoResult[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public String getFarm() {
+        return farm;
+    }
+
+    public void setFarm(String farm) {
+        this.farm = farm;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
 
 }

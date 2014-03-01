@@ -23,14 +23,14 @@ public class SearchTest {
     @org.junit.Test
     public void canSearch() throws Exception {
         Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
-        Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
+        Robolectric.addPendingHttpResponse(200, TestUtil.okHttpResponse);
         activity.doSearch("ferrara");
     }
 
     @org.junit.Test
      public void searchIntentCanBeReceived() throws Exception {
         Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
-        Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
+        Robolectric.addPendingHttpResponse(200, TestUtil.okHttpResponse);
         Intent intent = new Intent(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, "ferrara");
         activity.onNewIntent(intent);

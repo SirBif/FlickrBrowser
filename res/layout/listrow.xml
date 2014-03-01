@@ -46,7 +46,7 @@
     <!-- Rightend Arrow -->
     <ImageView android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:src="@android:drawable/ic_menu_slideshow"
+               android:src="@android:drawable/ic_menu_send"
                android:layout_alignParentRight="true"
                android:layout_centerVertical="true"/>
 

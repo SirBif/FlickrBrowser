@@ -6,6 +6,7 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.ImageAdapter;
 import com.flickrbrowser.util.SearchHistory;
+import com.flickrbrowser.util.SimpleLocationStrategy;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -33,6 +35,8 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     protected ImageAdapter imageAdapter;
     protected SearchRecentSuggestions suggestions;
     protected SearchResult searchResult = null;
+    protected LinearLayout layout;
+    protected SimpleLocationStrategy locationStrategy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +45,10 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         setContentView(R.layout.main);
         imageAdapter = new ImageAdapter(this);
         suggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
+        locationStrategy = new SimpleLocationStrategy((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
         getListView().setOnScrollListener(this);
         configureListView();
+        layout = (LinearLayout) this.findViewById(R.id.my_layout);
     }
 
     @Override
@@ -90,14 +96,25 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         }
     }
 
+    @Override
+    public void onStop() {
+        locationStrategy.stopListening();
+    }
+
+    @Override
+    public void onStart() {
+        locationStrategy.startListening();
+    }
+
     public ImageAdapter getImageAdapter() {
         return imageAdapter;
     }
 
     protected void doSearch(String query) {
         suggestions.saveRecentQuery(query, null);
+        layout.requestFocus();
         try {
-            searchResult = new SearchResult(query, imageAdapter);
+            searchResult = new SearchResult(query, locationStrategy.getLocation(), imageAdapter);
             imageAdapter.clearPhotos();
             searchResult.loadFirstPage();
         } catch (ParserConfigurationException e) {
