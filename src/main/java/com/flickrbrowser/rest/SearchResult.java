@@ -17,13 +17,13 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class SearchResult implements ResponseListener{
-    private static final int NO_PAGES_YET = 0;
+    protected static final int NO_PAGES_YET = 0;
     protected int currentPage;
     protected int numberOfPages;
     protected String query;
-    private ImageAdapter imageAdapter;
-    private FlickrXmlParser parser;
-    private RequestManager reqManager = RequestManager.getInstance();
+    protected ImageAdapter imageAdapter;
+    protected FlickrXmlParser parser;
+    protected RequestManager reqManager = RequestManager.getInstance();
 
     public SearchResult(String userQuery, ImageAdapter adapter) throws ParserConfigurationException {
         query = userQuery;

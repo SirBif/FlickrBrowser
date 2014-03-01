@@ -20,7 +20,7 @@ public class SearchResultTest {
     @org.junit.Test
     public void searchDoesntDoRequestsWhenThereAreNoMorePages() throws Exception {
         Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
-        SearchResult search = new SearchResult("ferrara", new ImageAdapter(activity));
+        SearchResult search = new SearchResult("ferrara", activity.getImageAdapter());
         Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
         search.numberOfPages = 1;
         search.currentPage = 1;
@@ -32,9 +32,9 @@ public class SearchResultTest {
     @org.junit.Test
     public void searchLoadsTheExactAmountOfData() throws Exception {
         Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
-        SearchResult search = new SearchResult("ferrara", new ImageAdapter(activity));
+        SearchResult search = new SearchResult("ferrara", activity.getImageAdapter());
         Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
-        search.loadNextPage();
+        search.loadFirstPage();
         search.loadNextPage();
         Assert.assertFalse(search.canLoadMore());
         Assert.assertEquals("No new image should be loaded", 1, activity.getImageAdapter().getCount());
