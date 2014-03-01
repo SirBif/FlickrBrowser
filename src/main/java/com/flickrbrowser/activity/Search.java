@@ -27,7 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * To change this template use File | Settings | File Templates.
  */
 public class Search extends ListActivity implements AbsListView.OnScrollListener {
-    protected ImageAdapter imageAdapter = new ImageAdapter(this);
+    protected ImageAdapter imageAdapter;
     protected SearchRecentSuggestions suggestions;
     protected SearchResult searchResult = null;
 
@@ -36,6 +36,7 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.main);
+        imageAdapter = new ImageAdapter(this);
         suggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
         getListView().setOnScrollListener(this);
         configureListView();

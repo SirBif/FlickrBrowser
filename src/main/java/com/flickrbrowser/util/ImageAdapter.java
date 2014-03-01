@@ -1,11 +1,14 @@
 package com.flickrbrowser.util;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import com.flickrbrowser.R;
 import com.flickrbrowser.rest.PhotoResult;
 import com.flickrbrowser.rest.PhotoSize;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,9 +27,11 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private List<PhotoResult> photos = new ArrayList<PhotoResult>();
     private ImageLoader imageLoader = ImageLoader.getInstance();
+    private static LayoutInflater inflater=null;
 
     public ImageAdapter(Context c) {
         mContext = c;
+        inflater = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
@@ -53,18 +58,31 @@ public class ImageAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+        RelativeLayout vi;
+        vi = (RelativeLayout) inflater.inflate(R.layout.listrow, null);
+
+        TextView title = (TextView)vi.findViewById(R.id.title); // title
+        TextView desc = (TextView)vi.findViewById(R.id.description); // artist name
+        ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
+
+        PhotoResult photo = photos.get(position);
+
+        // Setting all values in listview
+        title.setText(photo.getTitle());
+        desc.setText(photo.getDescription());
+        imageLoader.displayImage(photo.getUrl(PhotoSize.THUMBNAIL), thumb_image);
+        /*
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setPadding(0, 0, 0, 0);
         } else {
             imageView = (ImageView) convertView;
         }
         if(position < photos.size()) {
             imageLoader.displayImage(photos.get(position).getUrl(PhotoSize.THUMBNAIL), imageView);
-        }
-        return imageView;
+        } */
+        return vi;
     }
 }

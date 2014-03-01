@@ -16,7 +16,7 @@ import java.util.List;
  * Time: 10:14 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SearchResult implements ResponseListener{
+public class SearchResult implements IResponseListener {
     protected static final int NO_PAGES_YET = 0;
     protected int currentPage;
     protected int numberOfPages;

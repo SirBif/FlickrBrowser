@@ -28,7 +28,7 @@ public class RequestManager {
         return instance;
     }
 
-    public void executeRequest(HttpGet request, ResponseListener listener) {
+    public void executeRequest(HttpGet request, IResponseListener listener) {
         if(requestInProgress) {
             Log.d(FlickrBrowserConstants.TAG, "Request already in progress. Discarding the new one");
             return;
@@ -39,9 +39,9 @@ public class RequestManager {
     }
 
     private class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
-        private ResponseListener listener;
+        private IResponseListener listener;
 
-        public BackgroundHttpGet(ResponseListener listener) {
+        public BackgroundHttpGet(IResponseListener listener) {
             this.listener = listener;
         }
 

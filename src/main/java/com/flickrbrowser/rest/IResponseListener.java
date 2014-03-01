@@ -7,6 +7,6 @@ package com.flickrbrowser.rest;
  * Time: 1:48 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface ResponseListener {
+public interface IResponseListener {
     public void notify(String response);
 }
