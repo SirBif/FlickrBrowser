@@ -1,4 +1,4 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.rest;
 
 import android.net.http.AndroidHttpClient;
 import org.apache.http.HttpEntity;
@@ -6,10 +6,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
-import sun.misc.IOUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created with IntelliJ IDEA.

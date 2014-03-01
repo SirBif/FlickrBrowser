@@ -1,7 +1,8 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.location;
 
-import android.location.*;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 /**
@@ -17,9 +18,18 @@ public class SimpleLocationStrategy implements LocationListener {
     private static final long minTime = 30 * 1000;
     private static final float minDistance = 500;
     private Location currentBestLocation;
+    private boolean useLocation = true;
 
     public SimpleLocationStrategy(LocationManager locationMgr) {
         locationManager = locationMgr;
+    }
+
+    public boolean isUseLocation() {
+        return useLocation;
+    }
+
+    public void setUseLocation(boolean useLocation) {
+        this.useLocation = useLocation;
     }
 
     public void startListening() {
@@ -35,7 +45,7 @@ public class SimpleLocationStrategy implements LocationListener {
     }
 
     public SimpleLocation getLocation() {
-        if(currentBestLocation == null) {
+        if(currentBestLocation == null || !useLocation) {
             return null;
         }
         return new SimpleLocation(currentBestLocation);

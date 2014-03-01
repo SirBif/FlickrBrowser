@@ -2,10 +2,7 @@ package com.flickrbrowser.rest;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.flickrbrowser.util.FlickrBrowserConstants;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import com.flickrbrowser.util.PhotoSize;
 
 /**
  * Created with IntelliJ IDEA.

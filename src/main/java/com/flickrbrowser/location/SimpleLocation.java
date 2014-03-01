@@ -1,4 +1,4 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.location;
 
 import android.location.Location;
 

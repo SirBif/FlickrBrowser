@@ -1,7 +1,5 @@
 package com.flickrbrowser.rest;
 
-import java.io.InputStream;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Bif

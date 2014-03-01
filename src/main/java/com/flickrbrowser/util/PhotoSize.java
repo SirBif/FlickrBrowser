@@ -1,4 +1,4 @@
-package com.flickrbrowser.rest;
+package com.flickrbrowser.util;
 
 /**
  * Created with IntelliJ IDEA.

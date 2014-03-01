@@ -1,15 +1,12 @@
 package com.flickrbrowser.rest;
 
 import android.util.Log;
+import com.flickrbrowser.location.SimpleLocation;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.ImageAdapter;
-import com.flickrbrowser.util.SimpleLocation;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

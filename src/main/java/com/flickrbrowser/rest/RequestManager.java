@@ -3,11 +3,7 @@ package com.flickrbrowser.rest;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.util.RestClient;
 import org.apache.http.client.methods.HttpGet;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created with IntelliJ IDEA.

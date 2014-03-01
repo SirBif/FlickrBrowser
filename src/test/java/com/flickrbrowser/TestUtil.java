@@ -1,14 +1,8 @@
 package com.flickrbrowser;
 
-import android.location.Location;
-import android.location.LocationManager;
 import com.flickrbrowser.activity.Search;
 import com.flickrbrowser.activity.TestableSearch;
-import com.flickrbrowser.util.SimpleLocation;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import com.flickrbrowser.location.SimpleLocation;
 
 /**
  * Created with IntelliJ IDEA.

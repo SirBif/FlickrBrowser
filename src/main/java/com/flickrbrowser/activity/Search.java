@@ -10,17 +10,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
 import com.flickrbrowser.R;
+import com.flickrbrowser.location.SimpleLocationStrategy;
 import com.flickrbrowser.rest.PhotoResult;
-import com.flickrbrowser.rest.PhotoSize;
 import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.ImageAdapter;
 import com.flickrbrowser.util.SearchHistory;
-import com.flickrbrowser.util.SimpleLocationStrategy;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -67,6 +67,26 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         searchView.setSubmitButtonEnabled(true);
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_use_location:
+                boolean newSetting = !locationStrategy.isUseLocation();
+                locationStrategy.setUseLocation(newSetting);
+
+                Context context = getApplicationContext();
+                CharSequence text = newSetting ? "Search will use user location" : "Search will not use user location";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     protected SearchableInfo getSearchable(ComponentName componentName) {

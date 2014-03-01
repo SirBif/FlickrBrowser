@@ -1,8 +1,7 @@
 package com.flickrbrowser.rest;
 
-import android.location.Location;
+import com.flickrbrowser.location.SimpleLocation;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.util.SimpleLocation;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
