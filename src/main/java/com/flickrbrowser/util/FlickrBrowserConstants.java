@@ -8,6 +8,7 @@ package com.flickrbrowser.util;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class FlickrBrowserConstants {
+    public static final String TAG = "FlickrSearch";
 
     public abstract class XmlAttributes {
         public static final String ID = "id";

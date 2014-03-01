@@ -1,8 +1,7 @@
 package com.flickrbrowser.rest;
 
-import android.app.SearchManager;
-import android.content.Intent;
-import com.flickrbrowser.activity.SearchActivity;
+import com.flickrbrowser.activity.Search;
+import com.flickrbrowser.TestUtil;
 import com.flickrbrowser.util.ImageAdapter;
 import junit.framework.Assert;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ import org.robolectric.RobolectricTestRunner;
 public class SearchResultTest {
     @org.junit.Test
     public void searchDoesntDoRequestsWhenThereAreNoMorePages() throws Exception {
-        SearchActivity activity = Robolectric.buildActivity(SearchActivity.class).create().get();
+        Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
         SearchResult search = new SearchResult("ferrara", new ImageAdapter(activity));
         Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
         search.numberOfPages = 1;
@@ -28,5 +27,16 @@ public class SearchResultTest {
         search.loadNextPage();
         Assert.assertFalse(search.canLoadMore());
         Assert.assertEquals("No new image should be loaded", 0, activity.getImageAdapter().getCount());
+    }
+
+    @org.junit.Test
+    public void searchLoadsTheExactAmountOfData() throws Exception {
+        Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
+        SearchResult search = new SearchResult("ferrara", new ImageAdapter(activity));
+        Robolectric.addPendingHttpResponse(200, RestTest.okHttpResponse);
+        search.loadNextPage();
+        search.loadNextPage();
+        Assert.assertFalse(search.canLoadMore());
+        Assert.assertEquals("No new image should be loaded", 1, activity.getImageAdapter().getCount());
     }
 }

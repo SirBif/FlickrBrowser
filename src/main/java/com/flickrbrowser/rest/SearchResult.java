@@ -1,11 +1,12 @@
 package com.flickrbrowser.rest;
 
+import android.util.Log;
+import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.ImageAdapter;
 import com.flickrbrowser.util.Location;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,17 +16,19 @@ import java.util.List;
  * Time: 10:14 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SearchResult {
+public class SearchResult implements ResponseListener{
+    private static final int NO_PAGES_YET = 0;
     protected int currentPage;
     protected int numberOfPages;
     protected String query;
     private ImageAdapter imageAdapter;
     private FlickrXmlParser parser;
+    private RequestManager reqManager = RequestManager.getInstance();
 
-    public SearchResult(String query, ImageAdapter adapter) throws ParserConfigurationException {
-        this.query = query;
-        currentPage = 0;
-        numberOfPages = 0;
+    public SearchResult(String userQuery, ImageAdapter adapter) throws ParserConfigurationException {
+        query = userQuery;
+        currentPage = NO_PAGES_YET;
+        numberOfPages = NO_PAGES_YET;
         imageAdapter = adapter;
         parser = new FlickrXmlParser();
 
@@ -33,32 +36,39 @@ public class SearchResult {
     }
 
     public void loadNextPage() {
+        Log.d(FlickrBrowserConstants.TAG, "LoadNextPage " + currentPage + "/" + numberOfPages);
         if(canLoadMore()) {
-            currentPage++;
-            loadElements(currentPage);
+            loadData();
         }
     }
 
-    private void loadElements(int currentPage) {
+    private void loadData() {
+        currentPage++;
+        loadElements();
+    }
+
+    private void loadElements() {
         try {
-            BackgroundHttpGet restClient = new BackgroundHttpGet(this);
-            restClient.execute(FlickrRequestBuilder.createRequest(query, getCurrentLocation(), currentPage));
+            reqManager.executeRequest(FlickrRequestBuilder.createRequest(query, getCurrentLocation(), currentPage), this);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    public void parseResponse(String xmlResponse) {
+    @Override
+    public void notify(String xmlResponse) {
         List<PhotoResult> photos = parser.extractPhotoList(xmlResponse);
         imageAdapter.addPhotoResults(photos);
-        numberOfPages = parser.extractNumberOfPages(xmlResponse);
+        if(numberOfPages == NO_PAGES_YET) {
+            numberOfPages = parser.extractNumberOfPages(xmlResponse);
+        }
     }
 
     public boolean canLoadMore() {
-        if(numberOfPages > 0 && currentPage >= numberOfPages) {
-            return false;
+        if(currentPage < numberOfPages) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     private Location getCurrentLocation() {
@@ -79,5 +89,10 @@ public class SearchResult {
 
     public String getQuery() {
         return query;
+    }
+
+    public void loadFirstPage() {
+        Log.d(FlickrBrowserConstants.TAG, "LoadFirstPage");
+        loadData();
     }
 }
