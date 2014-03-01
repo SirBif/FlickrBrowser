@@ -6,6 +6,10 @@ import com.flickrbrowser.activity.Search;
 import com.flickrbrowser.activity.TestableSearch;
 import com.flickrbrowser.util.SimpleLocation;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Bif
@@ -37,7 +41,6 @@ public abstract class TestUtil {
             "<rsp stat=\"fail\">\n" +
             "\t<err code=\"112\" msg=\"Method &quot;fliclllkr.photos.search&quot; not found\" />\n" +
             "</rsp>";
-
 
     public static Class<? extends Search> getTestActivityClass() {
         return TestableSearch.class;

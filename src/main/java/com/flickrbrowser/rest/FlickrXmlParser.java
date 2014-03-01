@@ -11,8 +11,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +29,22 @@ public class FlickrXmlParser {
         documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     }
 
-    public List<PhotoResult> extractPhotoList(String xmlResponse) {
+    public ParsedResponse parseResponse(String xmlResponse) {
         List<PhotoResult> photoList = new ArrayList<PhotoResult>();
-
-        InputSource is = new InputSource();
-        is.setCharacterStream(new StringReader(xmlResponse));
+        int numberOfPages = 0;
 
         try {
-            Document doc = documentBuilder.parse(is);
-            NodeList nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTO_ATTRIBUTE_NAME);
+            InputStream stream = new ByteArrayInputStream(xmlResponse.getBytes());
+            Document doc = documentBuilder.parse(stream);
+            NodeList nodes;
+
+            nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTOS_ATTRIBUTE_NAME);
+            if(nodes.getLength() == 1) {
+                Element element = (Element) nodes.item(0);
+                numberOfPages = Integer.valueOf(element.getAttribute(FlickrBrowserConstants.XmlAttributes.PAGES));
+            }
+
+            nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTO_ATTRIBUTE_NAME);
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element element = (Element) nodes.item(i);
                 photoList.add(createPhotoResult(element));
@@ -48,26 +54,7 @@ public class FlickrXmlParser {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return photoList;
-    }
-
-    public int extractNumberOfPages(String xmlResponse) {
-        InputSource is = new InputSource();
-        is.setCharacterStream(new StringReader(xmlResponse));
-
-        try {
-            Document doc = documentBuilder.parse(is);
-            NodeList nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTOS_ATTRIBUTE_NAME);
-            if(nodes.getLength() == 1) {
-                Element element = (Element) nodes.item(0);
-                return Integer.valueOf(element.getAttribute(FlickrBrowserConstants.XmlAttributes.PAGES));
-            }
-        } catch (SAXException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return 0;
+        return new ParsedResponse(photoList, numberOfPages);
     }
 
     private PhotoResult createPhotoResult(Element element) {
@@ -87,5 +74,23 @@ public class FlickrXmlParser {
             }
         }
         return photo;
+    }
+
+    public class ParsedResponse {
+        private int pagesNumber;
+        private List<PhotoResult> photos;
+
+        public ParsedResponse(List<PhotoResult> photos, int pages) {
+            this.pagesNumber = pages;
+            this.photos = photos;
+        }
+
+        public int getPagesNumber() {
+            return pagesNumber;
+        }
+
+        public List<PhotoResult> getPhotos() {
+            return photos;
+        }
     }
 }

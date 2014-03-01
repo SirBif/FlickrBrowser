@@ -19,11 +19,14 @@ public class SimpleLocationStrategy implements LocationListener {
     private Location currentBestLocation;
 
     public SimpleLocationStrategy(LocationManager locationMgr) {
-        locationManager =locationMgr;
+        locationManager = locationMgr;
     }
 
     public void startListening() {
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, this);
+        //to avoid this bug: http://stackoverflow.com/questions/11394825/location-manager-issue-for-ice-cream-sandwhich
+        if(locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, this);
+        }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this);
     }
 

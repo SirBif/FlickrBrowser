@@ -6,6 +6,9 @@ import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.RestClient;
 import org.apache.http.client.methods.HttpGet;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Bif
@@ -49,6 +52,7 @@ public class RequestManager {
         protected String doInBackground(HttpGet... params) {
             RestClient client = new RestClient();
             return client.doRequest(params[0]);
+
         }
 
 

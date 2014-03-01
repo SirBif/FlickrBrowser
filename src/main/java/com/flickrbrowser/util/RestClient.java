@@ -1,13 +1,15 @@
 package com.flickrbrowser.util;
 
+import android.net.http.AndroidHttpClient;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import sun.misc.IOUtils;
+
+import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,16 +20,49 @@ import org.apache.http.util.EntityUtils;
  */
 public class RestClient {
     public String doRequest(HttpGet httpGet) {
-        HttpClient httpClient = new DefaultHttpClient();
+        AndroidHttpClient httpClient = AndroidHttpClient.newInstance("gzip");
+        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpGet);
+
         HttpContext localContext = new BasicHttpContext();
         String text = null;
         try {
             HttpResponse response = httpClient.execute(httpGet, localContext);
             HttpEntity entity = response.getEntity();
-            text = EntityUtils.toString(entity);
-        } catch (Exception e) {
+
+            return getStringFromInputStream(AndroidHttpClient.getUngzippedContent(entity));
+        } catch (IOException e) {
             return e.getLocalizedMessage();
+        } finally {
+            httpClient.close();
         }
-        return text;
     }
+
+    private static String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+
 }

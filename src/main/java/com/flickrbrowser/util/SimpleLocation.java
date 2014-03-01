@@ -37,4 +37,9 @@ public class SimpleLocation {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    @Override
+    public String toString() {
+        return "["+latitude+", "+longitude+"]";
+    }
 }

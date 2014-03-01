@@ -98,11 +98,13 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
 
     @Override
     public void onStop() {
+        super.onStop();
         locationStrategy.stopListening();
     }
 
     @Override
     public void onStart() {
+        super.onStart();
         locationStrategy.startListening();
     }
 

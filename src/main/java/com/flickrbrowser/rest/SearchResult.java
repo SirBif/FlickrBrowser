@@ -6,6 +6,8 @@ import com.flickrbrowser.util.ImageAdapter;
 import com.flickrbrowser.util.SimpleLocation;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -33,7 +35,6 @@ public class SearchResult implements IResponseListener {
         imageAdapter = adapter;
         queryLocation = location;
         parser = new FlickrXmlParser();
-
         imageAdapter.clearPhotos();
     }
 
@@ -59,10 +60,10 @@ public class SearchResult implements IResponseListener {
 
     @Override
     public void notify(String xmlResponse) {
-        List<PhotoResult> photos = parser.extractPhotoList(xmlResponse);
-        imageAdapter.addPhotoResults(photos);
+        FlickrXmlParser.ParsedResponse parsedResponse = parser.parseResponse(xmlResponse);
+        imageAdapter.addPhotoResults(parsedResponse.getPhotos());
         if(numberOfPages == NO_PAGES_YET) {
-            numberOfPages = parser.extractNumberOfPages(xmlResponse);
+            numberOfPages = parsedResponse.getPagesNumber();
         }
     }
 
