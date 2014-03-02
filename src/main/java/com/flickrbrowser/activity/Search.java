@@ -32,11 +32,11 @@ import javax.xml.parsers.ParserConfigurationException;
  * To change this template use File | Settings | File Templates.
  */
 public class Search extends ListActivity implements AbsListView.OnScrollListener {
-    protected ImageAdapter imageAdapter;
-    protected SearchRecentSuggestions searchSuggestions;
+    protected ImageAdapter imageAdapter = null;
+    protected SearchRecentSuggestions searchSuggestions = null;
     protected SearchResult currentSearch = null;
-    protected LinearLayout layout;
-    protected SimpleLocationListener locationListener;
+    protected LinearLayout layout = null;
+    protected SimpleLocationListener locationListener = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         searchSuggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
         locationListener = new SimpleLocationListener();
         locationListener.setUseLocation(false); //at startup keep it "general". besides, we wouldn't have a location yet at this point
-        getListView().setOnScrollListener(this);
         configureListView();
         layout = (LinearLayout) this.findViewById(R.id.my_layout);
     }
@@ -136,20 +135,15 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         locationManager.removeUpdates(locationListener);
     }
 
-    //needed for testing
-    public ImageAdapter getImageAdapter() {
-        return imageAdapter;
-    }
-
     protected void doSearch(String query) {
         searchSuggestions.saveRecentQuery(query, null);
-        layout.requestFocus();
+        layout.requestFocus();//to hide the keyboard
         try {
             currentSearch = new SearchResult(query, locationListener.getLocation(), imageAdapter);
             imageAdapter.clearPhotos();
             currentSearch.loadFirstPage();
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
@@ -160,8 +154,9 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     }
 
     protected void configureListView() {
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = getListView();
         listView.setAdapter(imageAdapter);
+        listView.setOnScrollListener(this);
         final Context ctx = this;
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
