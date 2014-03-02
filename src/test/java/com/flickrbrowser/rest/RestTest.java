@@ -1,17 +1,13 @@
 package com.flickrbrowser.rest;
 
 import com.flickrbrowser.TestUtil;
+import com.flickrbrowser.parcelable.PhotoResult;
 import junit.framework.Assert;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.maven.artifact.ant.shaded.IOUtil;
 import org.junit.Test;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 

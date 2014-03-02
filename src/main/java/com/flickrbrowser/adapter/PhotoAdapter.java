@@ -3,7 +3,8 @@ package com.flickrbrowser.adapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.parcelable.PhotoResult;
+import com.flickrbrowser.parcelable.SearchResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class PhotoAdapter extends BaseAdapter {
         return null;
     }
 
-    public void addPhotoResults(List<PhotoResult> itemsToAdd) {
+    public void addPhotos(List<PhotoResult> itemsToAdd) {
         photos.addAll(itemsToAdd);
         notifyDataSetChanged();
     }

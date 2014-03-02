@@ -18,21 +18,12 @@ import android.widget.*;
 import com.flickrbrowser.R;
 import com.flickrbrowser.adapter.ImageAdapter;
 import com.flickrbrowser.location.SimpleLocationListener;
-import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.parcelable.PhotoResult;
+import com.flickrbrowser.parcelable.SearchResult;
 import com.flickrbrowser.rest.PhotoSearchManager;
-import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.SearchHistory;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-/**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/25/14
- * Time: 10:25 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Search extends ListActivity implements AbsListView.OnScrollListener {
     protected ImageAdapter imageAdapter = null;
     protected SearchRecentSuggestions searchSuggestions = null;

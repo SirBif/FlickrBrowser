@@ -6,23 +6,19 @@ import com.flickrbrowser.util.FlickrBrowserConstants;
 import org.apache.http.client.methods.HttpGet;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/25/14
- * Time: 10:18 PM
- * To change this template use File | Settings | File Templates.
+ Keeps track of background http requests,  enforcing a "1 at a time" constraint
  */
-public class RequestManager {
-    private static RequestManager instance;
+public class BackgroundRequestManager {
+    private static BackgroundRequestManager instance;
     private static boolean requestInProgress = false;
 
-    private RequestManager() {
+    private BackgroundRequestManager() {
 
     }
 
-    public static RequestManager getInstance() {
+    public static BackgroundRequestManager getInstance() {
         if(instance == null) {
-            instance = new RequestManager();
+            instance = new BackgroundRequestManager();
         }
         return instance;
     }

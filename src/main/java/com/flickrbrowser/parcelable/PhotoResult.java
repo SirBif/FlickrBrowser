@@ -1,15 +1,11 @@
-package com.flickrbrowser.rest;
+package com.flickrbrowser.parcelable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.flickrbrowser.util.PhotoSize;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/27/14
- * Time: 11:52 AM
- * To change this template use File | Settings | File Templates.
+ An object representing a single Flickr photo. Contains the photo details and methods to retrieve the image url
  */
 public class PhotoResult implements Parcelable{
     private String id;
@@ -20,7 +16,7 @@ public class PhotoResult implements Parcelable{
     private String title;
     private String description;
 
-    protected PhotoResult() {
+    public PhotoResult() {
 
     }
 

@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.flickrbrowser.R;
-import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.parcelable.PhotoResult;
 import com.flickrbrowser.util.PhotoSize;
 import com.nostra13.universalimageloader.core.ImageLoader;
 

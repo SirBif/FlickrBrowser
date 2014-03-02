@@ -1,5 +1,6 @@
 package com.flickrbrowser.rest;
 
+import com.flickrbrowser.parcelable.PhotoResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -18,11 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/27/14
- * Time: 11:50 AM
- * To change this template use File | Settings | File Templates.
+ Helper class used to parse Flickr xml responses
  */
 public class FlickrXmlParser {
     private DocumentBuilder documentBuilder;
@@ -98,6 +95,11 @@ public class FlickrXmlParser {
         return photo;
     }
 
+    /**
+     * Objects of this class presents the results obtained from a Flickr XML response in a structured manner.
+     * Contains a list of PhotoResult and the number of result pages available
+     * @see PhotoResult
+     */
     public class ParsedResponse {
         private int pagesNumber;
         private List<PhotoResult> photos;

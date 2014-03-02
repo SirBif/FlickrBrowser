@@ -1,15 +1,11 @@
-package com.flickrbrowser.location;
+package com.flickrbrowser.parcelable;
 
 import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 3/1/14
- * Time: 3:18 PM
- * To change this template use File | Settings | File Templates.
+ Simplified location (compare to android.location.Location). Easier to mock
  */
 public class SimpleLocation implements Parcelable{
     private double latitude;

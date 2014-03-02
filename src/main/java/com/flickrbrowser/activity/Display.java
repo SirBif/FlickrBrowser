@@ -6,27 +6,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import com.flickrbrowser.R;
-import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.parcelable.PhotoResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.PhotoSize;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 3/1/14
- * Time: 11:08 AM
- * To change this template use File | Settings | File Templates.
- */
 public class Display extends Activity {
     private ImageLoader imageLoader;
     private TextView title;
     private TextView desc;
     private ImageView image;
-    //private ShareActionProvider mShareActionProvider;
     private Intent shareIntent;
 
     @Override

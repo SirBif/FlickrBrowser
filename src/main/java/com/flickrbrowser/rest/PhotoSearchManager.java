@@ -2,16 +2,14 @@ package com.flickrbrowser.rest;
 
 import android.util.Log;
 import com.flickrbrowser.adapter.PhotoAdapter;
+import com.flickrbrowser.parcelable.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 
 import java.net.URISyntaxException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 3/2/14
- * Time: 5:48 PM
- * To change this template use File | Settings | File Templates.
+ Implements the logic used to retrieve the results of a user query, using an instance of SearchResult to keep track of the state
+ @see SearchResult
  */
 public class PhotoSearchManager implements IResponseListener {
     private PhotoAdapter adapter;
@@ -25,7 +23,7 @@ public class PhotoSearchManager implements IResponseListener {
         searchResult = result;
         adapter.clearPhotos();
         if(result.getPhotos().size() > 0) {
-            adapter.addPhotoResults(result.getPhotos());
+            adapter.addPhotos(result.getPhotos());
         }
     }
 
@@ -36,7 +34,7 @@ public class PhotoSearchManager implements IResponseListener {
     @Override
     public void notify(String xmlResponse) {
         FlickrXmlParser.ParsedResponse parsedResponse = FlickrXmlParser.getParser().parseResponse(xmlResponse);
-        adapter.addPhotoResults(parsedResponse.getPhotos());
+        adapter.addPhotos(parsedResponse.getPhotos());
         searchResult.addPhotos(parsedResponse.getPhotos());
         if(searchResult.getNumberOfPages() == SearchResult.NO_PAGES_YET) {
             searchResult.setNumberOfPages(parsedResponse.getPagesNumber());
@@ -63,7 +61,7 @@ public class PhotoSearchManager implements IResponseListener {
 
     private void loadElements() {
         try {
-            RequestManager.getInstance().executeRequest(FlickrRequestBuilder.createRequest(searchResult), this);
+            BackgroundRequestManager.getInstance().executeRequest(FlickrRequestBuilder.createRequest(searchResult), this);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

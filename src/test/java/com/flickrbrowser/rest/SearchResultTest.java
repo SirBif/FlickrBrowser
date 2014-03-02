@@ -2,6 +2,7 @@ package com.flickrbrowser.rest;
 
 import com.flickrbrowser.TestUtil;
 import com.flickrbrowser.adapter.PhotoAdapter;
+import com.flickrbrowser.parcelable.SearchResult;
 import junit.framework.Assert;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -20,8 +21,8 @@ public class SearchResultTest {
         PhotoAdapter listener = new PhotoAdapter();
         SearchResult search = new SearchResult("ferrara", TestUtil.getTestLocation());
         PhotoSearchManager searchManager = new PhotoSearchManager(listener);
-        search.numberOfPages = 1;
-        search.currentPage = 1;
+        search.setCurrentPage(1);
+        search.setNumberOfPages(1);
         searchManager.setSearchResult(search);
         searchManager.loadNextPage();
         Assert.assertFalse(searchManager.canLoadMore());

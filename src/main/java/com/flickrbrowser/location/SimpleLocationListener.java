@@ -3,13 +3,11 @@ package com.flickrbrowser.location;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import com.flickrbrowser.parcelable.SimpleLocation;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 3/1/14
- * Time: 2:21 PM
- * To change this template use File | Settings | File Templates.
+ Simple class to handle location updates. Copied from the android developer guide
+ @see <a href="http://developer.android.com/guide/topics/location/strategies.html">Location Strategies</a>
  */
 public class SimpleLocationListener implements LocationListener {
     private static final int TWO_MINUTES = 1000 * 60 * 2;

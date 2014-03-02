@@ -1,19 +1,14 @@
-package com.flickrbrowser.rest;
+package com.flickrbrowser.parcelable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.flickrbrowser.location.SimpleLocation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/27/14
- * Time: 10:14 PM
- * To change this template use File | Settings | File Templates.
+ Represents the status of a user search: what the user asked and how many results have already been retrieved
  */
 public class SearchResult implements Parcelable{
     public static final int NO_PAGES_YET = 0;

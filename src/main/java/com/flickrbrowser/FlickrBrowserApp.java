@@ -4,7 +4,7 @@ import android.app.Application;
 import android.provider.SearchRecentSuggestions;
 import com.flickrbrowser.adapter.ImageAdapter;
 import com.flickrbrowser.location.SimpleLocationListener;
-import com.flickrbrowser.rest.SearchResult;
+import com.flickrbrowser.parcelable.SearchResult;
 import com.flickrbrowser.util.GzippedImageDownloader;
 import com.flickrbrowser.util.SearchHistory;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

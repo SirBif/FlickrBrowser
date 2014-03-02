@@ -1,6 +1,7 @@
 package com.flickrbrowser.rest;
 
-import com.flickrbrowser.location.SimpleLocation;
+import com.flickrbrowser.parcelable.SearchResult;
+import com.flickrbrowser.parcelable.SimpleLocation;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
@@ -14,11 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/25/14
- * Time: 10:45 PM
- * To change this template use File | Settings | File Templates.
+ Helper class used to create HttpGet requests for Flickr
  */
 public abstract class FlickrRequestBuilder {
     private static final String protocol = "http";

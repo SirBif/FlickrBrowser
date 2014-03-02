@@ -2,7 +2,7 @@ package com.flickrbrowser;
 
 import com.flickrbrowser.activity.Search;
 import com.flickrbrowser.activity.TestableSearch;
-import com.flickrbrowser.location.SimpleLocation;
+import com.flickrbrowser.parcelable.SimpleLocation;
 
 /**
  * Created with IntelliJ IDEA.
