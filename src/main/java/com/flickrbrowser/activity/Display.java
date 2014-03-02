@@ -11,6 +11,7 @@ import com.flickrbrowser.R;
 import com.flickrbrowser.parcelable.PhotoResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.PhotoSize;
+import com.flickrbrowser.util.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Display extends Activity {
@@ -39,8 +40,8 @@ public class Display extends Activity {
     protected void handleIntent(Intent intent) {
         PhotoResult photo = intent.getParcelableExtra(FlickrBrowserConstants.ParcelablePhoto);
         imageLoader.displayImage(photo.getUrl(PhotoSize.MEDIUM_640), image);
-        title.setText(photo.getTitle());
-        desc.setText(photo.getDescription());
+        title.setText(Utils.niceString(photo.getTitle()));
+        desc.setText(Utils.niceString(photo.getDescription()));
 
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);

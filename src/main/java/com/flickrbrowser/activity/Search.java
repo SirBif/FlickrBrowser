@@ -77,6 +77,11 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         return true;
     }
 
+    /**
+     * Retrieves the search configuration for the input component
+     * @param componentName
+     * @return
+     */
     protected SearchableInfo getSearchable(ComponentName componentName) {
         SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE );
         //the following line throws NPE when executed from Robolectric
@@ -100,6 +105,10 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         }
     }
 
+    /**
+     * Used to switch between using the user's location in the queries or not.
+     * displays a Toast with the new status
+     */
     protected void switchLocationSearchMode() {
         boolean useLocationInSearch = !locationListener.isUseLocation();
         locationListener.setUseLocation(useLocationInSearch);
@@ -131,6 +140,7 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         final long minTime = 30 * 1000;
         final float minDistance = 500;
+
         //to avoid this bug: http://stackoverflow.com/questions/11394825/location-manager-issue-for-ice-cream-sandwhich
         if(locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, locationListener);
@@ -145,18 +155,18 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         locationManager.removeUpdates(locationListener);
     }
 
+    protected void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            doSearch(intent.getStringExtra(SearchManager.QUERY));
+        }
+    }
+
     protected void doSearch(String query) {
         searchSuggestions.saveRecentQuery(query, null);
         layout.requestFocus();//to hide the keyboard
         searchManager.setSearchResult(new SearchResult(query, locationListener.getSimpleLocation()));
         imageAdapter.clearPhotos();
         searchManager.loadFirstPage();
-    }
-
-    protected void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            doSearch(intent.getStringExtra(SearchManager.QUERY));
-        }
     }
 
     protected void configureListView() {

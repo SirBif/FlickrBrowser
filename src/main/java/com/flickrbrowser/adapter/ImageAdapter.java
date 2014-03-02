@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.flickrbrowser.R;
 import com.flickrbrowser.parcelable.PhotoResult;
 import com.flickrbrowser.util.PhotoSize;
+import com.flickrbrowser.util.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -39,16 +40,11 @@ public class ImageAdapter extends PhotoAdapter {
 
         PhotoResult photo = photos.get(position);
 
-        title.setText(shortenString(photo.getTitle()));
-        desc.setText(shortenString(photo.getDescription()));
+        title.setText(Utils.niceString(photo.getTitle()));
+        desc.setText(Utils.niceString(photo.getDescription()));
         imageLoader.displayImage(photo.getUrl(PhotoSize.SMALL_SQUARE), thumb_image);
         return vi;
     }
 
-    private static String shortenString(String input) {
-        if(input != null && input.length() > 100) {
-            return input.substring(0, 100) + "...";
-        }
-        return input;
-    }
+
 }

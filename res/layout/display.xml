@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="title"
-            android:id="@+id/display_title" android:layout_gravity="center_horizontal|top" android:gravity="center_horizontal|top"
-            android:layout_alignParentTop="true" android:phoneNumber="true"/>
+            android:text="image title"
+            android:id="@+id/display_title" android:layout_gravity="center_horizontal|top"
+            android:phoneNumber="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:singleLine="true" android:layout_alignParentTop="true" android:textStyle="bold"
+            android:paddingBottom="2dp" android:paddingTop="2dp"/>
     <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/display_image" android:cropToPadding="false"
             android:scaleType="fitCenter" android:layout_gravity="center_horizontal"
-            android:layout_below="@+id/display_title" android:layout_above="@+id/display_description"/>
+            android:layout_alignParentTop="false" android:layout_below="@+id/display_title"
+            android:layout_above="@+id/desc_label"/>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="description"
-            android:id="@+id/display_description" android:layout_gravity="center_horizontal|bottom" android:gravity="center_horizontal|bottom"
-            android:layout_alignParentBottom="true" android:phoneNumber="true"/>
+            android:text="image description"
+            android:id="@+id/display_description" android:layout_gravity="center_horizontal|bottom"
+            android:layout_alignParentBottom="true" android:phoneNumber="true"
+            android:gravity="center_vertical|center_horizontal" android:paddingLeft="5dp"
+            android:singleLine="false" android:paddingBottom="5dp"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:id="@+id/desc_label" android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false" android:layout_alignParentBottom="false" android:textStyle="bold"
+            android:layout_above="@+id/display_description" android:singleLine="true" android:gravity="center_vertical|center_horizontal"
+            android:paddingBottom="2dp" android:paddingTop="2dp"/>
 </RelativeLayout>

@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
  Implements the logic used to retrieve the results of a user query, using an instance of SearchResult to keep track of the state
  @see SearchResult
  */
-public class PhotoSearchManager implements IResponseListener {
+public class PhotoSearchManager implements IRequestListener {
     private PhotoAdapter adapter;
     private SearchResult searchResult;
 
@@ -32,7 +32,7 @@ public class PhotoSearchManager implements IResponseListener {
     }
 
     @Override
-    public void notify(String xmlResponse) {
+    public void notifyEnd(String xmlResponse) {
         FlickrXmlParser.ParsedResponse parsedResponse = FlickrXmlParser.getParser().parseResponse(xmlResponse);
         adapter.addPhotos(parsedResponse.getPhotos());
         searchResult.addPhotos(parsedResponse.getPhotos());

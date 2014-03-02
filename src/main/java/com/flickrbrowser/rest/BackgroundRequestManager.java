@@ -23,7 +23,7 @@ public class BackgroundRequestManager {
         return instance;
     }
 
-    public void executeRequest(HttpGet request, IResponseListener listener) {
+    public void executeRequest(HttpGet request, IRequestListener listener) {
         if(requestInProgress) {
             Log.d(FlickrBrowserConstants.TAG, "Request already in progress. Discarding the new one");
             return;
@@ -34,10 +34,15 @@ public class BackgroundRequestManager {
     }
 
     private class BackgroundHttpGet extends AsyncTask<HttpGet, Void, String> {
-        private IResponseListener listener;
+        private IRequestListener listener;
 
-        public BackgroundHttpGet(IResponseListener listener) {
+        public BackgroundHttpGet(IRequestListener listener) {
             this.listener = listener;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
         }
 
         @Override
@@ -45,9 +50,10 @@ public class BackgroundRequestManager {
             return RestClient.execute(params[0]);
         }
 
+        @Override
         protected void onPostExecute(String response) {
             if (response!=null) {
-                listener.notify(response);
+                listener.notifyEnd(response);
             }
             requestInProgress = false;
         }
