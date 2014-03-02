@@ -1,16 +1,11 @@
 package com.flickrbrowser.rest;
 
-import android.net.http.AndroidHttpClient;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,21 +15,40 @@ import java.io.InputStreamReader;
  * To change this template use File | Settings | File Templates.
  */
 public class RestClient {
-    public String doRequest(HttpGet httpGet) {
-        AndroidHttpClient httpClient = AndroidHttpClient.newInstance("gzip");
-        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpGet);
 
-        HttpContext localContext = new BasicHttpContext();
-        String text = null;
+    public static String execute(String url) {
         try {
-            HttpResponse response = httpClient.execute(httpGet, localContext);
-            HttpEntity entity = response.getEntity();
+            return execute(new URL(url));
+        } catch(IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
-            return getStringFromInputStream(AndroidHttpClient.getUngzippedContent(entity));
-        } catch (IOException e) {
-            return e.getLocalizedMessage();
-        } finally {
-            httpClient.close();
+    public static String execute(HttpGet request) {
+        try {
+            return execute(request.getURI().toURL());
+        } catch(IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String execute(URL url) {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            InputStream in = null;
+            try {
+                in = new BufferedInputStream(urlConnection.getInputStream());
+                String result = getStringFromInputStream(in);
+                return result;
+            } finally {
+                IOUtils.closeQuietly(in);
+                urlConnection.disconnect();
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 

@@ -1,4 +1,4 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.flickrbrowser.R;
 import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.util.PhotoSize;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -40,7 +41,7 @@ public class ImageAdapter extends PhotoAdapter {
 
         title.setText(shortenString(photo.getTitle()));
         desc.setText(shortenString(photo.getDescription()));
-        imageLoader.displayImage(photo.getUrl(PhotoSize.THUMBNAIL), thumb_image);
+        imageLoader.displayImage(photo.getUrl(PhotoSize.SMALL_SQUARE), thumb_image);
         return vi;
     }
 

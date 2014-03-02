@@ -19,12 +19,11 @@ public abstract class FlickrBrowserConstants {
         public static final String FARM = "farm";
         public static final String TITLE = "title";
 
-        public static final String DESCRIPTION_ATTRIBUTE_NAME = "description";
+        public static final String PHOTO_NODE = "photo";
+        public static final String DESCRIPTION_NODE = "description";
 
-        public static final String PHOTO_ATTRIBUTE_NAME = "photo";
+        public static final String PHOTOS_NODE = "photos";
         public static final String PAGES = "pages";
-
-        public static final String PHOTOS_ATTRIBUTE_NAME = "photos";
     }
 
     public abstract class RestParameters {

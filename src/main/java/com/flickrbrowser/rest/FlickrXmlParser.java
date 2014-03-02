@@ -1,6 +1,7 @@
 package com.flickrbrowser.rest;
 
 import com.flickrbrowser.util.FlickrBrowserConstants;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -43,21 +44,29 @@ public class FlickrXmlParser {
     }
 
     public ParsedResponse parseResponse(String xmlResponse) {
+        InputStream is = new ByteArrayInputStream(xmlResponse.getBytes());
+        try {
+            return parseResponse(is);
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+    }
+
+    public ParsedResponse parseResponse(InputStream xmlResponse) {
         List<PhotoResult> photoList = new ArrayList<PhotoResult>();
         int numberOfPages = 0;
 
         try {
-            InputStream stream = new ByteArrayInputStream(xmlResponse.getBytes());
-            Document doc = documentBuilder.parse(stream);
+            Document doc = documentBuilder.parse(xmlResponse);
             NodeList nodes;
 
-            nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTOS_ATTRIBUTE_NAME);
+            nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTOS_NODE);
             if(nodes.getLength() == 1) {
                 Element element = (Element) nodes.item(0);
                 numberOfPages = Integer.valueOf(element.getAttribute(FlickrBrowserConstants.XmlAttributes.PAGES));
             }
 
-            nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTO_ATTRIBUTE_NAME);
+            nodes = doc.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.PHOTO_NODE);
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element element = (Element) nodes.item(i);
                 photoList.add(createPhotoResult(element));
@@ -79,7 +88,7 @@ public class FlickrXmlParser {
         photo.setServer(element.getAttribute(FlickrBrowserConstants.XmlAttributes.SERVER));
         photo.setTitle(element.getAttribute(FlickrBrowserConstants.XmlAttributes.TITLE));
 
-        NodeList descriptions = element.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.DESCRIPTION_ATTRIBUTE_NAME);
+        NodeList descriptions = element.getElementsByTagName(FlickrBrowserConstants.XmlAttributes.DESCRIPTION_NODE);
         if(descriptions.getLength() > 0) {
             Node desc = descriptions.item(0);
             if(desc.hasChildNodes()) {

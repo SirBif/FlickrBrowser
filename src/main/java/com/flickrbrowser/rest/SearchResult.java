@@ -3,7 +3,7 @@ package com.flickrbrowser.rest;
 import android.util.Log;
 import com.flickrbrowser.location.SimpleLocation;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.util.PhotoAdapter;
+import com.flickrbrowser.adapter.PhotoAdapter;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.net.URISyntaxException;
@@ -30,6 +30,11 @@ public class SearchResult implements IResponseListener {
         adapter = photoAdapter;
         queryLocation = location;
         adapter.clearPhotos();
+    }
+
+    public void loadFirstPage() {
+        Log.d(FlickrBrowserConstants.TAG, "LoadFirstPage");
+        loadData();
     }
 
     public void loadNextPage() {
@@ -78,10 +83,5 @@ public class SearchResult implements IResponseListener {
 
     public String getQuery() {
         return query;
-    }
-
-    public void loadFirstPage() {
-        Log.d(FlickrBrowserConstants.TAG, "LoadFirstPage");
-        loadData();
     }
 }

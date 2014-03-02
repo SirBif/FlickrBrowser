@@ -19,7 +19,7 @@ import com.flickrbrowser.location.SimpleLocationListener;
 import com.flickrbrowser.rest.PhotoResult;
 import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.util.ImageAdapter;
+import com.flickrbrowser.adapter.ImageAdapter;
 import com.flickrbrowser.util.SearchHistory;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,6 +46,7 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         imageAdapter = new ImageAdapter(this);
         searchSuggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
         locationListener = new SimpleLocationListener();
+        locationListener.setUseLocation(false); //at startup keep it "general". besides, we wouldn't have a location yet at this point
         getListView().setOnScrollListener(this);
         configureListView();
         layout = (LinearLayout) this.findViewById(R.id.my_layout);

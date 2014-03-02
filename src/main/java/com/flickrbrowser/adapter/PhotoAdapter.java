@@ -1,4 +1,4 @@
-package com.flickrbrowser.util;
+package com.flickrbrowser.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;

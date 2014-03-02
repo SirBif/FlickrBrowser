@@ -2,6 +2,7 @@ package com.flickrbrowser.rest;
 
 import com.flickrbrowser.TestUtil;
 import junit.framework.Assert;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -24,20 +25,21 @@ import java.util.List;
 public class RestTest {
     @Test
     public void canQueryFlickr() throws URISyntaxException, IOException {
-        DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", TestUtil.getTestLocation(), 1);
-        HttpResponse response = client.execute(request);
-        InputStream is = response.getEntity().getContent();
-        Assert.assertTrue(IOUtil.toString(is).substring(0, 100).contains("rsp stat=\"ok\""));
+        String response = RestClient.execute(request);
+        Assert.assertTrue(response.contains("rsp stat=\"ok\""));
     }
 
     @Test
     public void queryWorksEvenWithoutLocation() throws URISyntaxException, IOException {
-        DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", null, 1);
-        HttpResponse response = client.execute(request);
-        InputStream is = response.getEntity().getContent();
-        Assert.assertTrue(IOUtil.toString(is).substring(0, 100).contains("rsp stat=\"ok\""));
+        String response = RestClient.execute(request);
+        Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+    }
+
+    @Test
+    public void restClientHandlesBadUrls() throws URISyntaxException, IOException {
+        String response = RestClient.execute("somethingnotsupported");
     }
 
     @Test
@@ -58,7 +60,7 @@ public class RestTest {
 
     @Test
     public void parseDoesNotBreakWhenThereIsNoDescription() throws ParserConfigurationException {
-        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponseNoDesc).getPhotos();
+        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponseNoDescription).getPhotos();
         Assert.assertEquals(1, photos.size());
         PhotoResult photo = photos.get(0);
     }

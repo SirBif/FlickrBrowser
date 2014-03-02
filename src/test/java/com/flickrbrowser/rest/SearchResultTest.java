@@ -1,10 +1,9 @@
 package com.flickrbrowser.rest;
 
 import com.flickrbrowser.TestUtil;
-import com.flickrbrowser.util.PhotoAdapter;
+import com.flickrbrowser.adapter.PhotoAdapter;
 import junit.framework.Assert;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 /**
@@ -14,6 +13,7 @@ import org.robolectric.RobolectricTestRunner;
  * Time: 10:47 PM
  * To change this template use File | Settings | File Templates.
  */
+@RunWith(RobolectricTestRunner.class)
 public class SearchResultTest {
     @org.junit.Test
     public void searchDoesntDoRequestsWhenThereAreNoMorePages() throws Exception {

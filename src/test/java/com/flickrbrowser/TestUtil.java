@@ -23,7 +23,7 @@ public abstract class TestUtil {
             "</photos>\n" +
             "</rsp>";
 
-    public static final String okHttpResponseNoDesc = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
+    public static final String okHttpResponseNoDescription = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
             "<rsp stat=\"ok\">\n" +
             "<photos page=\"1\" pages=\"1\" perpage=\"250\" total=\"1\">\n" +
             "    <photo id=\"1535647353\" owner=\"98545448@N00\" secret=\"e5b7537af5\" server=\"2371\" farm=\"3\" title=\"Airone rosso\" ispublic=\"1\" isfriend=\"0\" isfamily=\"0\">\n" +

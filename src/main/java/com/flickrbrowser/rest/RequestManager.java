@@ -46,11 +46,8 @@ public class RequestManager {
 
         @Override
         protected String doInBackground(HttpGet... params) {
-            RestClient client = new RestClient();
-            return client.doRequest(params[0]);
-
+            return RestClient.execute(params[0]);
         }
-
 
         protected void onPostExecute(String response) {
             if (response!=null) {

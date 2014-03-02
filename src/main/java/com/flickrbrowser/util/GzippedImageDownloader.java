@@ -1,4 +1,4 @@
-package com.flickrbrowser.rest;
+package com.flickrbrowser.util;
 
 import android.content.Context;
 import android.net.http.AndroidHttpClient;

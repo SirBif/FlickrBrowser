@@ -1,7 +1,7 @@
 package com.flickrbrowser;
 
 import android.app.Application;
-import com.flickrbrowser.rest.GzippedImageDownloader;
+import com.flickrbrowser.util.GzippedImageDownloader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
