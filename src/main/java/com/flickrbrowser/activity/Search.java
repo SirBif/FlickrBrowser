@@ -29,7 +29,7 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     protected SearchRecentSuggestions searchSuggestions = null;
     protected LinearLayout layout = null;
     protected SimpleLocationListener locationListener = null;
-    protected PhotoSearchManager searchManager;
+    protected PhotoSearchManager searchManager = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
