@@ -50,4 +50,8 @@ public abstract class FlickrRequestBuilder {
         HttpGet get = new HttpGet(uri);
         return get;
     }
+
+    public static HttpGet createRequest(SearchResult result) throws URISyntaxException {
+        return createRequest(result.getQuery(), result.getLocation(), result.getCurrentPage());
+    }
 }

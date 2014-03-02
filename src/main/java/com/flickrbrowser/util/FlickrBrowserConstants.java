@@ -10,6 +10,9 @@ package com.flickrbrowser.util;
 public abstract class FlickrBrowserConstants {
     public static final String TAG = "FlickrSearch";
     public static final String ParcelablePhoto = "photo";
+    public static final String ParcelableLocation = "location";
+    public static final String ParcelableUseLocation = "use_location";
+    public static final String ParcelableSearchResult = "search_result";
 
     public abstract class XmlAttributes {
         public static final String ID = "id";

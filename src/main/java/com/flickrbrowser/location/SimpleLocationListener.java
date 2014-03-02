@@ -23,11 +23,22 @@ public class SimpleLocationListener implements LocationListener {
         this.useLocation = useLocation;
     }
 
-    public SimpleLocation getLocation() {
+    public SimpleLocation getSimpleLocation() {
         if(currentBestLocation == null || !useLocation) {
             return null;
         }
         return new SimpleLocation(currentBestLocation);
+    }
+
+    public Location getLocation() {
+        if(!useLocation) {
+            return null;
+        }
+        return currentBestLocation;
+    }
+
+    public void setLocation(Location location) {
+        currentBestLocation = location;
     }
 
     @Override

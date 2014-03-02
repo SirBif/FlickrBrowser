@@ -6,6 +6,7 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
@@ -15,11 +16,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 import com.flickrbrowser.R;
+import com.flickrbrowser.adapter.ImageAdapter;
 import com.flickrbrowser.location.SimpleLocationListener;
 import com.flickrbrowser.rest.PhotoResult;
+import com.flickrbrowser.rest.PhotoSearchManager;
 import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.adapter.ImageAdapter;
 import com.flickrbrowser.util.SearchHistory;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,9 +36,9 @@ import javax.xml.parsers.ParserConfigurationException;
 public class Search extends ListActivity implements AbsListView.OnScrollListener {
     protected ImageAdapter imageAdapter = null;
     protected SearchRecentSuggestions searchSuggestions = null;
-    protected SearchResult currentSearch = null;
     protected LinearLayout layout = null;
     protected SimpleLocationListener locationListener = null;
+    protected PhotoSearchManager searchManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,11 +46,28 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.main);
         imageAdapter = new ImageAdapter(this);
-        searchSuggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
         locationListener = new SimpleLocationListener();
-        locationListener.setUseLocation(false); //at startup keep it "general". besides, we wouldn't have a location yet at this point
+        searchSuggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
+        searchManager = new PhotoSearchManager(imageAdapter);
+
+        if(savedInstanceState != null) {
+            locationListener.setLocation((Location) savedInstanceState.getParcelable(FlickrBrowserConstants.ParcelableLocation));
+            locationListener.setUseLocation(savedInstanceState.getBoolean(FlickrBrowserConstants.ParcelableUseLocation, false));
+            searchManager.setSearchResult((SearchResult) savedInstanceState.getParcelable(FlickrBrowserConstants.ParcelableSearchResult));
+        } else {
+            locationListener.setUseLocation(false); //at startup keep it "general". besides, we wouldn't have a location yet at this point
+        }
         configureListView();
         layout = (LinearLayout) this.findViewById(R.id.my_layout);
+        layout.requestFocus();//to hide the keyboard after switching orientation
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable(FlickrBrowserConstants.ParcelableLocation, locationListener.getLocation());
+        savedInstanceState.putBoolean(FlickrBrowserConstants.ParcelableUseLocation, locationListener.isUseLocation());
+        savedInstanceState.putParcelable(FlickrBrowserConstants.ParcelableSearchResult, searchManager.getCurrentSearchResult());
     }
 
     @Override
@@ -109,8 +128,8 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE) {
             int threshold = 5;
-            if (listView.getLastVisiblePosition() >= listView.getCount() - 1 - threshold && currentSearch != null) {
-                currentSearch.loadNextPage();
+            if (listView.getLastVisiblePosition() >= listView.getCount() - 1 - threshold && searchManager.getCurrentSearchResult() != null) {
+                searchManager.loadNextPage();
             }
         }
     }
@@ -138,13 +157,9 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     protected void doSearch(String query) {
         searchSuggestions.saveRecentQuery(query, null);
         layout.requestFocus();//to hide the keyboard
-        try {
-            currentSearch = new SearchResult(query, locationListener.getLocation(), imageAdapter);
-            imageAdapter.clearPhotos();
-            currentSearch.loadFirstPage();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
+        searchManager.setSearchResult(new SearchResult(query, locationListener.getSimpleLocation()));
+        imageAdapter.clearPhotos();
+        searchManager.loadFirstPage();
     }
 
     protected void handleIntent(Intent intent) {

@@ -18,11 +18,13 @@ public class SearchResultTest {
     @org.junit.Test
     public void searchDoesntDoRequestsWhenThereAreNoMorePages() throws Exception {
         PhotoAdapter listener = new PhotoAdapter();
-        SearchResult search = new SearchResult("ferrara", TestUtil.getTestLocation(), listener);
+        SearchResult search = new SearchResult("ferrara", TestUtil.getTestLocation());
+        PhotoSearchManager searchManager = new PhotoSearchManager(listener);
         search.numberOfPages = 1;
         search.currentPage = 1;
-        search.loadNextPage();
-        Assert.assertFalse(search.canLoadMore());
+        searchManager.setSearchResult(search);
+        searchManager.loadNextPage();
+        Assert.assertFalse(searchManager.canLoadMore());
         Assert.assertEquals("No new image should be loaded", 0, listener.getCount());
     }
 }

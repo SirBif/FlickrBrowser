@@ -1,5 +1,7 @@
 package com.flickrbrowser.rest;
 
+import com.flickrbrowser.adapter.PhotoAdapter;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Bif

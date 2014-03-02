@@ -1,12 +1,12 @@
 package com.flickrbrowser.rest;
 
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.flickrbrowser.location.SimpleLocation;
-import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.adapter.PhotoAdapter;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,73 +15,86 @@ import java.net.URISyntaxException;
  * Time: 10:14 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SearchResult implements IResponseListener {
-    protected static final int NO_PAGES_YET = 0;
+public class SearchResult implements Parcelable{
+    public static final int NO_PAGES_YET = 0;
     protected int currentPage;
     protected int numberOfPages;
     protected String query;
-    protected PhotoAdapter adapter;
     protected SimpleLocation queryLocation;
+    protected List<PhotoResult> retrievedPhotos;
 
-    public SearchResult(String userQuery, SimpleLocation location, PhotoAdapter photoAdapter) throws ParserConfigurationException {
+    public SearchResult(String userQuery, SimpleLocation location) {
         query = userQuery;
         currentPage = NO_PAGES_YET;
         numberOfPages = NO_PAGES_YET;
-        adapter = photoAdapter;
         queryLocation = location;
-        adapter.clearPhotos();
+        retrievedPhotos = new ArrayList<PhotoResult>();
     }
 
-    public void loadFirstPage() {
-        Log.d(FlickrBrowserConstants.TAG, "LoadFirstPage");
-        loadData();
-    }
-
-    public void loadNextPage() {
-        Log.d(FlickrBrowserConstants.TAG, "LoadNextPage " + currentPage + "/" + numberOfPages);
-        if(canLoadMore()) {
-            loadData();
-        }
-    }
-
-    private void loadData() {
-        currentPage++;
-        loadElements();
-    }
-
-    private void loadElements() {
-        try {
-            RequestManager.getInstance().executeRequest(FlickrRequestBuilder.createRequest(query, queryLocation, currentPage), this);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void notify(String xmlResponse) {
-        FlickrXmlParser.ParsedResponse parsedResponse = FlickrXmlParser.getParser().parseResponse(xmlResponse);
-        adapter.addPhotoResults(parsedResponse.getPhotos());
-        if(numberOfPages == NO_PAGES_YET) {
-            numberOfPages = parsedResponse.getPagesNumber();
-        }
-    }
-
-    public boolean canLoadMore() {
-        if(currentPage < numberOfPages) {
-            return true;
-        }
-        return false;
+    public SearchResult(Parcel in) {
+        query = in.readString();
+        currentPage = in.readInt();
+        numberOfPages = in.readInt();
+        queryLocation = (SimpleLocation) in.readValue(SimpleLocation.class.getClassLoader());
+        PhotoResult[] photoArray = (PhotoResult[]) in.readValue(PhotoResult.class.getClassLoader());
+        retrievedPhotos = new ArrayList<PhotoResult>(Arrays.asList(photoArray));
     }
 
     public int getCurrentPage() {
         return currentPage;
     }
 
+    public void setCurrentPage(int number) {
+        this.currentPage = number;
+    }
+
     public int getNumberOfPages() {
         return numberOfPages;
+    }
+
+    public void setNumberOfPages(int number) {
+        numberOfPages = number;
     }
 
     public String getQuery() {
         return query;
     }
+
+    public SimpleLocation getLocation() {
+        return queryLocation;
+    }
+
+    public void addPhotos(List<PhotoResult> photos) {
+        retrievedPhotos.addAll(photos);
+    }
+
+    public List<PhotoResult> getPhotos() {
+        return retrievedPhotos;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(query);
+        parcel.writeInt(currentPage);
+        parcel.writeInt(numberOfPages);
+        parcel.writeValue(queryLocation);
+        parcel.writeValue(retrievedPhotos.toArray());
+    }
+
+    public static final Parcelable.Creator<SearchResult> CREATOR= new Parcelable.Creator<SearchResult>() {
+        @Override
+        public SearchResult createFromParcel(Parcel source) {
+            return new SearchResult(source);  //using parcelable constructor
+        }
+
+        @Override
+        public SearchResult[] newArray(int size) {
+            return new SearchResult[size];
+        }
+    };
 }
