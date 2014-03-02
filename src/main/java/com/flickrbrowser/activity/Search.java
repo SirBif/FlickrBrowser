@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.*;
 import com.flickrbrowser.R;
-import com.flickrbrowser.location.SimpleLocationStrategy;
+import com.flickrbrowser.location.SimpleLocationListener;
 import com.flickrbrowser.rest.PhotoResult;
 import com.flickrbrowser.rest.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
@@ -33,10 +33,10 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class Search extends ListActivity implements AbsListView.OnScrollListener {
     protected ImageAdapter imageAdapter;
-    protected SearchRecentSuggestions suggestions;
-    protected SearchResult searchResult = null;
+    protected SearchRecentSuggestions searchSuggestions;
+    protected SearchResult currentSearch = null;
     protected LinearLayout layout;
-    protected SimpleLocationStrategy locationStrategy;
+    protected SimpleLocationListener locationListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,8 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.main);
         imageAdapter = new ImageAdapter(this);
-        suggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
-        locationStrategy = new SimpleLocationStrategy((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
+        searchSuggestions = new SearchRecentSuggestions(this, SearchHistory.AUTHORITY, SearchHistory.MODE);
+        locationListener = new SimpleLocationListener();
         getListView().setOnScrollListener(this);
         configureListView();
         layout = (LinearLayout) this.findViewById(R.id.my_layout);
@@ -59,34 +59,12 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
-
         // Add SearchWidget.
         SearchView searchView = (SearchView) menu.findItem( R.id.action_search ).getActionView();
         searchView.setSearchableInfo(getSearchable(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setIconifiedByDefault(false);
         searchView.setSubmitButtonEnabled(true);
-
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_use_location:
-                boolean newSetting = !locationStrategy.isUseLocation();
-                locationStrategy.setUseLocation(newSetting);
-
-                Context context = getApplicationContext();
-                CharSequence text = newSetting ? "Search will use user location" : "Search will not use user location";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     protected SearchableInfo getSearchable(ComponentName componentName) {
@@ -101,6 +79,27 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_use_location:
+                switchLocationSearchMode();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void switchLocationSearchMode() {
+        boolean useLocationInSearch = !locationListener.isUseLocation();
+        locationListener.setUseLocation(useLocationInSearch);
+
+        CharSequence text = useLocationInSearch ? getString(R.string.locationWillBeUsed) : getString(R.string.locationWillNotBeUsed);
+        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
         //leave this empty
@@ -110,35 +109,44 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE) {
             int threshold = 5;
-            if (listView.getLastVisiblePosition() >= listView.getCount() - 1 - threshold && searchResult != null) {
-                searchResult.loadNextPage();
+            if (listView.getLastVisiblePosition() >= listView.getCount() - 1 - threshold && currentSearch != null) {
+                currentSearch.loadNextPage();
             }
         }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        locationStrategy.stopListening();
+    public void onStart() {
+        super.onStart();
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        final long minTime = 30 * 1000;
+        final float minDistance = 500;
+        //to avoid this bug: http://stackoverflow.com/questions/11394825/location-manager-issue-for-ice-cream-sandwhich
+        if(locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, locationListener);
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, locationListener);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        locationStrategy.startListening();
+    public void onStop() {
+        super.onStop();
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates(locationListener);
     }
 
+    //needed for testing
     public ImageAdapter getImageAdapter() {
         return imageAdapter;
     }
 
     protected void doSearch(String query) {
-        suggestions.saveRecentQuery(query, null);
+        searchSuggestions.saveRecentQuery(query, null);
         layout.requestFocus();
         try {
-            searchResult = new SearchResult(query, locationStrategy.getLocation(), imageAdapter);
+            currentSearch = new SearchResult(query, locationListener.getLocation(), imageAdapter);
             imageAdapter.clearPhotos();
-            searchResult.loadFirstPage();
+            currentSearch.loadFirstPage();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

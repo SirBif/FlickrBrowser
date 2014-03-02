@@ -12,36 +12,16 @@ import android.os.Bundle;
  * Time: 2:21 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SimpleLocationStrategy implements LocationListener {
-    private LocationManager locationManager;
+public class SimpleLocationListener implements LocationListener {
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final long minTime = 30 * 1000;
-    private static final float minDistance = 500;
     private Location currentBestLocation;
     private boolean useLocation = true;
-
-    public SimpleLocationStrategy(LocationManager locationMgr) {
-        locationManager = locationMgr;
-    }
-
     public boolean isUseLocation() {
         return useLocation;
     }
 
     public void setUseLocation(boolean useLocation) {
         this.useLocation = useLocation;
-    }
-
-    public void startListening() {
-        //to avoid this bug: http://stackoverflow.com/questions/11394825/location-manager-issue-for-ice-cream-sandwhich
-        if(locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, this);
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this);
-    }
-
-    public void stopListening() {
-        locationManager.removeUpdates(this);
     }
 
     public SimpleLocation getLocation() {

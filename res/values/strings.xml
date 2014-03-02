@@ -4,5 +4,7 @@
     <string name="search_hint">Search</string>
     <string name="search_authority">com.flickrbrowser.util.SearchHistory</string>
     <string name="search_suggest">" ?"</string>
-    <string name="use_location">"Use location"</string>
+    <string name="use_location">Toggle location</string>
+    <string name="locationWillBeUsed">Location based search enabled</string>
+    <string name="locationWillNotBeUsed">Location based search disabled</string>
 </resources>

@@ -25,8 +25,20 @@ import java.util.List;
  */
 public class FlickrXmlParser {
     private DocumentBuilder documentBuilder;
+    private static FlickrXmlParser parserInstance;
 
-    public FlickrXmlParser() throws ParserConfigurationException {
+    public static FlickrXmlParser getParser() {
+        if(parserInstance == null) {
+            try {
+                parserInstance = new FlickrXmlParser();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return parserInstance;
+    }
+
+    private FlickrXmlParser() throws ParserConfigurationException {
         documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     }
 

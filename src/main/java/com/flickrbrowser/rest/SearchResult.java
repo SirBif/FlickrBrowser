@@ -3,7 +3,7 @@ package com.flickrbrowser.rest;
 import android.util.Log;
 import com.flickrbrowser.location.SimpleLocation;
 import com.flickrbrowser.util.FlickrBrowserConstants;
-import com.flickrbrowser.util.ImageAdapter;
+import com.flickrbrowser.util.PhotoAdapter;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.net.URISyntaxException;
@@ -20,19 +20,16 @@ public class SearchResult implements IResponseListener {
     protected int currentPage;
     protected int numberOfPages;
     protected String query;
-    protected ImageAdapter imageAdapter;
-    protected FlickrXmlParser parser;
-    protected RequestManager reqManager = RequestManager.getInstance();
+    protected PhotoAdapter adapter;
     protected SimpleLocation queryLocation;
 
-    public SearchResult(String userQuery, SimpleLocation location, ImageAdapter adapter) throws ParserConfigurationException {
+    public SearchResult(String userQuery, SimpleLocation location, PhotoAdapter photoAdapter) throws ParserConfigurationException {
         query = userQuery;
         currentPage = NO_PAGES_YET;
         numberOfPages = NO_PAGES_YET;
-        imageAdapter = adapter;
+        adapter = photoAdapter;
         queryLocation = location;
-        parser = new FlickrXmlParser();
-        imageAdapter.clearPhotos();
+        adapter.clearPhotos();
     }
 
     public void loadNextPage() {
@@ -49,7 +46,7 @@ public class SearchResult implements IResponseListener {
 
     private void loadElements() {
         try {
-            reqManager.executeRequest(FlickrRequestBuilder.createRequest(query, queryLocation, currentPage), this);
+            RequestManager.getInstance().executeRequest(FlickrRequestBuilder.createRequest(query, queryLocation, currentPage), this);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -57,8 +54,8 @@ public class SearchResult implements IResponseListener {
 
     @Override
     public void notify(String xmlResponse) {
-        FlickrXmlParser.ParsedResponse parsedResponse = parser.parseResponse(xmlResponse);
-        imageAdapter.addPhotoResults(parsedResponse.getPhotos());
+        FlickrXmlParser.ParsedResponse parsedResponse = FlickrXmlParser.getParser().parseResponse(xmlResponse);
+        adapter.addPhotoResults(parsedResponse.getPhotos());
         if(numberOfPages == NO_PAGES_YET) {
             numberOfPages = parsedResponse.getPagesNumber();
         }

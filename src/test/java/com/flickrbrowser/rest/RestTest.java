@@ -42,8 +42,7 @@ public class RestTest {
 
     @Test
     public void canParseResult() throws ParserConfigurationException {
-        FlickrXmlParser parser = new FlickrXmlParser();
-        List<PhotoResult> photos = parser.parseResponse(TestUtil.okHttpResponse).getPhotos();
+        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponse).getPhotos();
         Assert.assertEquals(1, photos.size());
         PhotoResult photo = photos.get(0);
         Assert.assertEquals("Airone rosso", photo.getTitle());
@@ -51,8 +50,7 @@ public class RestTest {
 
     @Test
      public void canParseDescription() throws ParserConfigurationException {
-        FlickrXmlParser parser = new FlickrXmlParser();
-        List<PhotoResult> photos = parser.parseResponse(TestUtil.okHttpResponse).getPhotos();
+        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponse).getPhotos();
         Assert.assertEquals(1, photos.size());
         PhotoResult photo = photos.get(0);
         Assert.assertEquals("airone", photo.getDescription());
@@ -60,16 +58,14 @@ public class RestTest {
 
     @Test
     public void parseDoesNotBreakWhenThereIsNoDescription() throws ParserConfigurationException {
-        FlickrXmlParser parser = new FlickrXmlParser();
-        List<PhotoResult> photos = parser.parseResponse(TestUtil.okHttpResponseNoDesc).getPhotos();
+        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponseNoDesc).getPhotos();
         Assert.assertEquals(1, photos.size());
         PhotoResult photo = photos.get(0);
     }
 
     @Test
     public void badRequestGeneratesNoPhotos() throws ParserConfigurationException {
-        FlickrXmlParser parser = new FlickrXmlParser();
-        List<PhotoResult> photos = parser.parseResponse(TestUtil.koHttpResponse).getPhotos();
+        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.koHttpResponse).getPhotos();
         Assert.assertEquals(0, photos.size());
     }
 }
