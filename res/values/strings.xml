@@ -7,4 +7,5 @@
     <string name="use_location">Toggle location</string>
     <string name="locationWillBeUsed">Location based search enabled</string>
     <string name="locationWillNotBeUsed">Location based search disabled</string>
+    <string name="share_photo">Share link</string>
 </resources>

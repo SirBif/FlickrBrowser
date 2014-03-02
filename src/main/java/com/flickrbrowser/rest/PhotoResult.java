@@ -41,6 +41,10 @@ public class PhotoResult implements Parcelable{
         return "http://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + "_" + size + ".jpg";
     }
 
+    public String getWebPageUrl() {
+        return "http://www.flickr.com/photos/" +owner +"/"+ id;
+    }
+
     @Override
     public int describeContents() {
         return 0;

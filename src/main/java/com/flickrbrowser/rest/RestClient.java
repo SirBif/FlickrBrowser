@@ -37,6 +37,8 @@ public class RestClient {
     public static String execute(URL url) {
         try {
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(3000);
+            urlConnection.setReadTimeout(5000);
             InputStream in = null;
             try {
                 in = new BufferedInputStream(urlConnection.getInputStream());
