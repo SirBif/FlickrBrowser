@@ -14,11 +14,7 @@ import com.flickrbrowser.util.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/25/14
- * Time: 10:20 PM
- * To change this template use File | Settings | File Templates.
+Extension of PhotoAdapter that takes care of displaying the results
  */
 public class ImageAdapter extends PhotoAdapter {
     private ImageLoader imageLoader = ImageLoader.getInstance();

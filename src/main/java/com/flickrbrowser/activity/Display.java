@@ -14,6 +14,9 @@ import com.flickrbrowser.util.PhotoSize;
 import com.flickrbrowser.util.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+/**
+ Activity used to display single photo results
+ */
 public class Display extends Activity {
     private ImageLoader imageLoader;
     private TextView title;

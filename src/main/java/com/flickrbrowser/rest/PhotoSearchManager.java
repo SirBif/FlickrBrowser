@@ -41,13 +41,18 @@ public class PhotoSearchManager implements IRequestListener {
         }
     }
 
-
+    /**
+     * retrieves the first page of results from Flickr
+     */
     public void loadFirstPage() {
         Log.d(FlickrBrowserConstants.TAG, "LoadFirstPage");
         loadData();
     }
 
-    public void loadNextPage() {
+    /**
+     * This method checks if there are more photos available to download. If that's the case, retrieves the next page
+     */
+    public void loadNextPageIfPossible() {
         Log.d(FlickrBrowserConstants.TAG, "LoadNextPage " + searchResult.getCurrentPage() + "/" + searchResult.getNumberOfPages());
         if(canLoadMore()) {
             loadData();

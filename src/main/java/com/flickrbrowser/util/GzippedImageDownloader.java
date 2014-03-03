@@ -13,11 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 3/1/14
- * Time: 6:02 PM
- * To change this template use File | Settings | File Templates.
+An image downloader that retrieves images using Content-Encoding: gzip
  */
 public class GzippedImageDownloader extends BaseImageDownloader implements ImageDownloader{
     private AndroidHttpClient httpClient;

@@ -8,11 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/25/14
- * Time: 10:58 PM
- * To change this template use File | Settings | File Templates.
+ Static client that can be used to perform http requests
  */
 public class RestClient {
 

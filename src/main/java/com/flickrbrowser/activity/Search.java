@@ -24,6 +24,9 @@ import com.flickrbrowser.rest.PhotoSearchManager;
 import com.flickrbrowser.util.FlickrBrowserConstants;
 import com.flickrbrowser.util.SearchHistory;
 
+/**
+ Main activity. Handles user searches and location
+ */
 public class Search extends ListActivity implements AbsListView.OnScrollListener {
     protected ImageAdapter imageAdapter = null;
     protected SearchRecentSuggestions searchSuggestions = null;
@@ -129,7 +132,7 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         if (scrollState == SCROLL_STATE_IDLE) {
             int threshold = 5;
             if (listView.getLastVisiblePosition() >= listView.getCount() - 1 - threshold && searchManager.getCurrentSearchResult() != null) {
-                searchManager.loadNextPage();
+                searchManager.loadNextPageIfPossible();
             }
         }
     }

@@ -24,7 +24,7 @@ public class SearchResultTest {
         search.setCurrentPage(1);
         search.setNumberOfPages(1);
         searchManager.setSearchResult(search);
-        searchManager.loadNextPage();
+        searchManager.loadNextPageIfPossible();
         Assert.assertFalse(searchManager.canLoadMore());
         Assert.assertEquals("No new image should be loaded", 0, listener.getCount());
     }

@@ -20,7 +20,7 @@
 
     </LinearLayout>
 
-    <!-- Title Of Song-->
+    <!-- Title-->
     <TextView
             android:id="@+id/display_title"
             android:layout_width="wrap_content"

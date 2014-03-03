@@ -10,11 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 3/2/14
- * Time: 2:59 AM
- * To change this template use File | Settings | File Templates.
+ Generic image adapter that handles instances of PhotoResult but does not display anything
+@see PhotoResult
  */
 public class PhotoAdapter extends BaseAdapter {
     protected  List<PhotoResult> photos = new ArrayList<PhotoResult>();

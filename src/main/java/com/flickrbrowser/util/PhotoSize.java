@@ -1,11 +1,7 @@
 package com.flickrbrowser.util;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Bif
- * Date: 2/27/14
- * Time: 1:02 PM
- * To change this template use File | Settings | File Templates.
+Image sizes supported by the Flickr API
  */
 public enum PhotoSize {
     SMALL_SQUARE("s"),
