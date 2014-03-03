@@ -115,6 +115,10 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
     protected void switchLocationSearchMode() {
         boolean useLocationInSearch = !locationListener.isUseLocation();
         locationListener.setUseLocation(useLocationInSearch);
+        /*
+         I'm not turning off location updates here on purpose,
+         so when the user decides he wants to include the location in his search I already have an up-to date location
+        */
 
         CharSequence text = useLocationInSearch ? getString(R.string.locationWillBeUsed) : getString(R.string.locationWillNotBeUsed);
         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
