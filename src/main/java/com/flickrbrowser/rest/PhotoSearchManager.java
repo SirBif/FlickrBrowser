@@ -22,7 +22,7 @@ public class PhotoSearchManager implements IRequestListener {
     public void setSearchResult(SearchResult result) {
         searchResult = result;
         adapter.clearPhotos();
-        if(result.getPhotos().size() > 0) {
+        if(result!= null && result.getPhotos().size() > 0) {
             adapter.addPhotos(result.getPhotos());
         }
     }

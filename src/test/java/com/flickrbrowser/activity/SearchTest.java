@@ -3,6 +3,7 @@ package com.flickrbrowser.activity;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.os.Bundle;
 import com.flickrbrowser.TestUtil;
 import junit.framework.Assert;
 import org.junit.runner.RunWith;
@@ -35,5 +36,10 @@ public class SearchTest {
         intent.putExtra(SearchManager.QUERY, "ferrara");
         activity.onNewIntent(intent);
         Assert.assertNotNull(activity.searchManager.getCurrentSearchResult());
+    }
+
+    @org.junit.Test
+    public void doesNotBreakIfRecreatedWithAnEmptyBundle() throws Exception {
+        Activity activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create(new Bundle()).get();
     }
 }
