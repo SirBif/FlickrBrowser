@@ -21,10 +21,8 @@ public class PhotoSearchManager implements IRequestListener {
 
     public void setSearchResult(SearchResult result) {
         searchResult = result;
-        adapter.clearPhotos();
-        if(result!= null && result.getPhotos().size() > 0) {
-            adapter.addPhotos(result.getPhotos());
-        }
+        adapter.setPhotos(result.getPhotos());
+        adapter.notifyDataSetChanged();
     }
 
     public SearchResult getCurrentSearchResult() {
@@ -34,8 +32,9 @@ public class PhotoSearchManager implements IRequestListener {
     @Override
     public void notifyEnd(String xmlResponse) {
         FlickrXmlParser.ParsedResponse parsedResponse = FlickrXmlParser.getParser().parseResponse(xmlResponse);
-        adapter.addPhotos(parsedResponse.getPhotos());
         searchResult.addPhotos(parsedResponse.getPhotos());
+        adapter.notifyDataSetChanged();
+
         if(searchResult.getNumberOfPages() == SearchResult.NO_PAGES_YET) {
             searchResult.setNumberOfPages(parsedResponse.getPagesNumber());
         }

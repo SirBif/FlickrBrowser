@@ -48,8 +48,10 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
             locationListener.setLocation((Location) savedInstanceState.getParcelable(FlickrBrowserConstants.ParcelableLocation));
             locationListener.setUseLocation(savedInstanceState.getBoolean(FlickrBrowserConstants.ParcelableUseLocation, false));
             searchManager.setSearchResult((SearchResult) savedInstanceState.getParcelable(FlickrBrowserConstants.ParcelableSearchResult));
+            savedInstanceState.clear();
         } else {
             locationListener.setUseLocation(false); //at startup keep it "general". besides, we wouldn't have a location yet at this point
+            searchManager.setSearchResult(new SearchResult("", null));
         }
         configureListView();
         layout = (LinearLayout) this.findViewById(R.id.my_layout);
@@ -172,7 +174,6 @@ public class Search extends ListActivity implements AbsListView.OnScrollListener
         searchSuggestions.saveRecentQuery(query, null);
         layout.requestFocus();//to hide the keyboard
         searchManager.setSearchResult(new SearchResult(query, locationListener.getSimpleLocation()));
-        imageAdapter.clearPhotos();
         searchManager.loadFirstPage();
     }
 

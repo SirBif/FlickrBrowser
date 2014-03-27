@@ -4,9 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import com.flickrbrowser.parcelable.PhotoResult;
-import com.flickrbrowser.parcelable.SearchResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +12,8 @@ import java.util.List;
 @see PhotoResult
  */
 public class PhotoAdapter extends BaseAdapter {
-    protected  List<PhotoResult> photos = new ArrayList<PhotoResult>();
+    protected  List<PhotoResult> photos;
+
     @Override
     public int getCount() {
         return photos.size();
@@ -35,13 +34,11 @@ public class PhotoAdapter extends BaseAdapter {
         return null;
     }
 
-    public void addPhotos(List<PhotoResult> itemsToAdd) {
-        photos.addAll(itemsToAdd);
-        notifyDataSetChanged();
+    public List<PhotoResult> getPhotos() {
+        return photos;
     }
 
-    public void clearPhotos() {
-        photos.clear();
-        notifyDataSetChanged();
+    public void setPhotos(List<PhotoResult> photos) {
+        this.photos = photos;
     }
 }
