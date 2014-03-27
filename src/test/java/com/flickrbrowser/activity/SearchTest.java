@@ -3,8 +3,8 @@ package com.flickrbrowser.activity;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.os.Bundle;
 import com.flickrbrowser.TestUtil;
+import com.flickrbrowser.parcelable.SearchResult;
 import junit.framework.Assert;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -30,16 +30,11 @@ public class SearchTest {
     @org.junit.Test
      public void searchIntentCanBeReceived() throws Exception {
         Search activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create().get();
-        Assert.assertNull(activity.searchManager.getCurrentSearchResult());
+        SearchResult firstResult = activity.searchManager.getCurrentSearchResult();
         Robolectric.addPendingHttpResponse(200, TestUtil.okHttpResponse);
         Intent intent = new Intent(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, "ferrara");
         activity.onNewIntent(intent);
-        Assert.assertNotNull(activity.searchManager.getCurrentSearchResult());
-    }
-
-    @org.junit.Test
-    public void doesNotBreakIfRecreatedWithAnEmptyBundle() throws Exception {
-        Activity activity = Robolectric.buildActivity(TestUtil.getTestActivityClass()).create(new Bundle()).get();
+        Assert.assertNotSame(firstResult, activity.searchManager.getCurrentSearchResult());
     }
 }
