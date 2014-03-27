@@ -3,11 +3,13 @@ package com.flickrbrowser.rest;
 import com.flickrbrowser.TestUtil;
 import com.flickrbrowser.parcelable.PhotoResult;
 import junit.framework.Assert;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.junit.Test;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -22,20 +24,26 @@ public class RestTest {
     @Test
     public void canQueryFlickr() throws URISyntaxException, IOException {
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", TestUtil.getTestLocation(), 1);
-        String response = RestClient.execute(request);
+        GenericConnection connection = new GenericConnection(request);
+        String response = IOUtils.toString(connection.getStream());
         Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+        connection.disconnect();
     }
 
     @Test
     public void queryWorksEvenWithoutLocation() throws URISyntaxException, IOException {
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", null, 1);
-        String response = RestClient.execute(request);
+        GenericConnection connection = new GenericConnection(request);
+        String response = IOUtils.toString(connection.getStream());
         Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+        connection.disconnect();
     }
 
-    @Test
+    @Test(expected = MalformedURLException.class)
     public void restClientHandlesBadUrls() throws URISyntaxException, IOException {
-        String response = RestClient.execute("somethingnotsupported");
+        GenericConnection connection = new GenericConnection("somethingnotsupported");
+        String response = IOUtils.toString(connection.getStream());
+        connection.disconnect();
     }
 
     @Test

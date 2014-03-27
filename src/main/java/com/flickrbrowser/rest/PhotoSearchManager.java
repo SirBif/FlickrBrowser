@@ -30,8 +30,7 @@ public class PhotoSearchManager implements IRequestListener {
     }
 
     @Override
-    public void notifyEnd(String xmlResponse) {
-        FlickrXmlParser.ParsedResponse parsedResponse = FlickrXmlParser.getParser().parseResponse(xmlResponse);
+    public void notifyEnd(FlickrXmlParser.ParsedResponse parsedResponse) {
         searchResult.addPhotos(parsedResponse.getPhotos());
         adapter.notifyDataSetChanged();
 

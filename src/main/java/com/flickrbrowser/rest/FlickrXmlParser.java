@@ -42,14 +42,18 @@ public class FlickrXmlParser {
 
     public ParsedResponse parseResponse(String xmlResponse) {
         InputStream is = new ByteArrayInputStream(xmlResponse.getBytes());
-        try {
-            return parseResponse(is);
-        } finally {
-            IOUtils.closeQuietly(is);
-        }
+        return parseResponse(is);
     }
 
     public ParsedResponse parseResponse(InputStream xmlResponse) {
+        try {
+            return parseInputStream(xmlResponse);
+        } finally {
+            IOUtils.closeQuietly(xmlResponse);
+        }
+    }
+
+    private ParsedResponse parseInputStream(InputStream xmlResponse) {
         List<PhotoResult> photoList = new ArrayList<PhotoResult>();
         int numberOfPages = 0;
 

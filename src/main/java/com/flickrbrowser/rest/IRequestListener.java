@@ -8,5 +8,5 @@ package com.flickrbrowser.rest;
  * To change this template use File | Settings | File Templates.
  */
 public interface IRequestListener {
-    public void notifyEnd(String response);
+    public void notifyEnd(FlickrXmlParser.ParsedResponse response);
 }
