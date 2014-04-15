@@ -44,7 +44,7 @@ public class Display extends Activity {
         PhotoResult photo = intent.getParcelableExtra(FlickrBrowserConstants.ParcelablePhoto);
         imageLoader.displayImage(photo.getUrl(PhotoSize.MEDIUM_640), image);
         title.setText(Utils.niceString(photo.getTitle()));
-        desc.setText(Utils.niceString(photo.getDescription()));
+        desc.setText(Utils.niceString(photo.getDescriptionString()));
 
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);

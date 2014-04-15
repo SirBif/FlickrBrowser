@@ -37,7 +37,7 @@ public class ImageAdapter extends PhotoAdapter {
         PhotoResult photo = photos.get(position);
 
         title.setText(Utils.niceString(photo.getTitle()));
-        desc.setText(Utils.niceString(photo.getDescription()));
+        desc.setText(Utils.niceString(photo.getDescriptionString()));
         imageLoader.displayImage(photo.getUrl(PhotoSize.SMALL_SQUARE), thumb_image);
         return vi;
     }

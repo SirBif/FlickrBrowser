@@ -2,11 +2,19 @@ package com.flickrbrowser.rest;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import com.flickrbrowser.rest.FlickrXmlParser.ParsedResponse;
 import com.flickrbrowser.util.FlickrBrowserConstants;
+import com.flickrbrowser.util.FlickrPhotoArray;
+import com.flickrbrowser.util.FlickrResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.zip.ZipInputStream;
 
 /**
  Keeps track of background http requests,  enforcing a "1 at a time" constraint
@@ -36,7 +44,7 @@ public class BackgroundRequestManager {
         httpGet.execute(request);
     }
 
-    private class BackgroundHttpGet extends AsyncTask<HttpGet, Void, ParsedResponse> {
+    private class BackgroundHttpGet extends AsyncTask<HttpGet, Void, FlickrPhotoArray> {
         private IRequestListener listener;
 
         public BackgroundHttpGet(IRequestListener listener) {
@@ -49,12 +57,18 @@ public class BackgroundRequestManager {
         }
 
         @Override
-        protected ParsedResponse doInBackground(HttpGet... params) {
+        protected FlickrPhotoArray doInBackground(HttpGet... params) {
             try {
                 GenericConnection connection = new GenericConnection(params[0]);
+                Reader reader = null;
                 try{
-                    return FlickrXmlParser.getParser().parseResponse(connection.getStream());
+                    reader = new InputStreamReader(new ZipInputStream()connection.getStream());
+                    JsonParser parser = new JsonParser();
+                    JsonObject obj = parser.parse(reader).getAsJsonObject();
+                    FlickrResponse flickrResponse = GsonHelper.getGsonInstance().fromJson(obj.get("photos"), FlickrResponse.class);
+                    return flickrResponse.getPhotos();
                 } finally {
+                    IOUtils.closeQuietly(reader);
                     connection.disconnect();
                 }
             } catch (IOException e) {
@@ -64,7 +78,7 @@ public class BackgroundRequestManager {
         }
 
         @Override
-        protected void onPostExecute(ParsedResponse response) {
+        protected void onPostExecute(FlickrPhotoArray response) {
             if (response!=null) {
                 listener.notifyEnd(response);
             }

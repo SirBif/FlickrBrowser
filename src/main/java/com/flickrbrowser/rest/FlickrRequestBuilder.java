@@ -24,7 +24,7 @@ public abstract class FlickrRequestBuilder {
     private static final String path = "/services/rest";
     private static final String method = "flickr.photos.search";
     private static final String apiKey = "b2990b6dd1749db8c7351de9decd46a0";
-    private static final String format = "rest";
+    private static final String format = "json";
     private static final String additionalFields = "description";
     private static final int resultsPerPage = 20;
     private static final int radius = 10;
