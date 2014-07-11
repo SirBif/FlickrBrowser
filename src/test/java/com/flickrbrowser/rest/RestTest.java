@@ -2,8 +2,8 @@ package com.flickrbrowser.rest;
 
 import com.flickrbrowser.TestUtil;
 import com.flickrbrowser.parcelable.PhotoResult;
+import com.flickrbrowser.util.FlickrPhotoArray;
 import com.flickrbrowser.util.FlickrResponse;
-import com.google.gson.Gson;
 import junit.framework.Assert;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
@@ -27,7 +27,7 @@ public class RestTest {
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", TestUtil.getTestLocation(), 1);
         GenericConnection connection = new GenericConnection(request);
         String response = IOUtils.toString(connection.getStream());
-        Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+        Assert.assertTrue(response.contains("\"stat\":\"ok\""));
         connection.disconnect();
     }
 
@@ -36,7 +36,7 @@ public class RestTest {
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", null, 1);
         GenericConnection connection = new GenericConnection(request);
         String response = IOUtils.toString(connection.getStream());
-        Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+        Assert.assertTrue(response.contains("\"stat\":\"ok\""));
         connection.disconnect();
     }
 
@@ -52,7 +52,7 @@ public class RestTest {
         PhotoResult[] photos = GsonHelper.fromJson(TestUtil.okHttpResponse, FlickrResponse.class).getPhotos().getPhoto();
         Assert.assertEquals(1, photos.length);
         PhotoResult photo = photos[0];
-        Assert.assertEquals("Airone rosso", photo.getTitle());
+        Assert.assertEquals("serbatoio dell' acqua - tank of water", photo.getTitle());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class RestTest {
         PhotoResult[] photos = GsonHelper.fromJson(TestUtil.okHttpResponse, FlickrResponse.class).getPhotos().getPhoto();
         Assert.assertEquals(1, photos.length);
         PhotoResult photo = photos[0];
-        Assert.assertEquals("airone", photo.getDescriptionString());
+        Assert.assertEquals("serbatoio", photo.getDescriptionString());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class RestTest {
 
     @Test
     public void badRequestGeneratesNoPhotos() throws ParserConfigurationException {
-        PhotoResult[] photos = GsonHelper.fromJson(TestUtil.koHttpResponse, FlickrResponse.class).getPhotos().getPhoto();
-        Assert.assertEquals(0, photos.length);
+        FlickrPhotoArray photos = GsonHelper.fromJson(TestUtil.koHttpResponse, FlickrResponse.class).getPhotos();
+        Assert.assertNull(photos);
     }
 }

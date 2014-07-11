@@ -7,7 +7,6 @@ import com.flickrbrowser.util.FlickrPhotoArray;
 import com.flickrbrowser.util.FlickrResponse;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 
@@ -62,7 +61,7 @@ public class BackgroundRequestManager {
                 GenericConnection connection = new GenericConnection(params[0]);
                 Reader reader = null;
                 try{
-                    reader = new InputStreamReader(new ZipInputStream()connection.getStream());
+                    reader = new InputStreamReader(new ZipInputStream(connection.getStream()));
                     JsonParser parser = new JsonParser();
                     JsonObject obj = parser.parse(reader).getAsJsonObject();
                     FlickrResponse flickrResponse = GsonHelper.getGsonInstance().fromJson(obj.get("photos"), FlickrResponse.class);
@@ -72,6 +71,9 @@ public class BackgroundRequestManager {
                     connection.disconnect();
                 }
             } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IllegalStateException e) {
                 e.printStackTrace();
                 return null;
             }

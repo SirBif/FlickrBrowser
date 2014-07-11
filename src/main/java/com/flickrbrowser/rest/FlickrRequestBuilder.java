@@ -18,13 +18,14 @@ import java.util.List;
  Helper class used to create HttpGet requests for Flickr
  */
 public abstract class FlickrRequestBuilder {
-    private static final String protocol = "http";
+    private static final String protocol = "https";
     private static final String host = "api.flickr.com";
     private static final int port = -1;
     private static final String path = "/services/rest";
     private static final String method = "flickr.photos.search";
     private static final String apiKey = "b2990b6dd1749db8c7351de9decd46a0";
     private static final String format = "json";
+    private static final String noCallback = "1";
     private static final String additionalFields = "description";
     private static final int resultsPerPage = 20;
     private static final int radius = 10;
@@ -34,6 +35,7 @@ public abstract class FlickrRequestBuilder {
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.METHOD, method));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.API_KEY, apiKey));
         qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.FORMAT, format));
+        qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.NO_CALLBACK, noCallback));
         if(location != null) {
             qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LATITUDE, String.valueOf(location.getLatitude())));
             qparams.add(new BasicNameValuePair(FlickrBrowserConstants.RestParameters.LONGITUDE,String.valueOf(location.getLongitude())));

@@ -2,10 +2,10 @@ package com.flickrbrowser.rest;
 
 import org.apache.http.client.methods.HttpGet;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -13,7 +13,7 @@ import java.net.URL;
  Static client that can be used to perform http requests
  */
 public class GenericConnection {
-    private HttpURLConnection connection;
+    private HttpsURLConnection connection;
     private URL requestUrl;
 
     public GenericConnection(String url) throws MalformedURLException {
@@ -26,10 +26,10 @@ public class GenericConnection {
 
     public InputStream getStream() throws IOException {
         disconnect();
-        HttpURLConnection urlConnection = (HttpURLConnection) requestUrl.openConnection();
-        urlConnection.setConnectTimeout(3000);
-        urlConnection.setReadTimeout(5000);
-        return new BufferedInputStream(urlConnection.getInputStream());
+        connection = (HttpsURLConnection) requestUrl.openConnection();
+        connection.setConnectTimeout(3000);
+        connection.setReadTimeout(5000);
+        return new BufferedInputStream(connection.getInputStream());
     }
 
     public void disconnect() {
