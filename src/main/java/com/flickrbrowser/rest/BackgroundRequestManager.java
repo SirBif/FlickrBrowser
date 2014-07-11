@@ -9,11 +9,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.zip.ZipInputStream;
 
 /**
  Keeps track of background http requests,  enforcing a "1 at a time" constraint
@@ -58,18 +58,7 @@ public class BackgroundRequestManager {
         @Override
         protected FlickrPhotoArray doInBackground(HttpGet... params) {
             try {
-                GenericConnection connection = new GenericConnection(params[0]);
-                Reader reader = null;
-                try{
-                    reader = new InputStreamReader(new ZipInputStream(connection.getStream()));
-                    JsonParser parser = new JsonParser();
-                    JsonObject obj = parser.parse(reader).getAsJsonObject();
-                    FlickrResponse flickrResponse = GsonHelper.getGsonInstance().fromJson(obj.get("photos"), FlickrResponse.class);
-                    return flickrResponse.getPhotos();
-                } finally {
-                    IOUtils.closeQuietly(reader);
-                    connection.disconnect();
-                }
+                return getPhotos(params[0]);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -85,6 +74,21 @@ public class BackgroundRequestManager {
                 listener.notifyEnd(response);
             }
             requestInProgress = false;
+        }
+    }
+
+    protected static FlickrPhotoArray getPhotos(HttpGet request) throws IOException, InvalidStateException {
+        GenericConnection connection = new GenericConnection(request);
+        Reader reader = null;
+        try{
+            reader = new InputStreamReader(connection.getStream());
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(reader).getAsJsonObject();
+            FlickrResponse flickrResponse = GsonHelper.getGsonInstance().fromJson(obj, FlickrResponse.class);
+            return flickrResponse.getPhotos();
+        } finally {
+            IOUtils.closeQuietly(reader);
+            connection.disconnect();
         }
     }
 }

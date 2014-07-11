@@ -28,7 +28,7 @@ public class ImageAdapter extends PhotoAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         RelativeLayout vi;
-        vi = (RelativeLayout) inflater.inflate(R.layout.listrow, parent);
+        vi = (RelativeLayout) inflater.inflate(R.layout.listrow, null);
 
         TextView title = (TextView)vi.findViewById(R.id.display_title);
         TextView desc = (TextView)vi.findViewById(R.id.display_description);
