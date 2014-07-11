@@ -1,5 +1,7 @@
 package com.flickrbrowser.rest;
 
+import com.flickrbrowser.util.FlickrPhotoArray;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Bif
@@ -8,5 +10,5 @@ package com.flickrbrowser.rest;
  * To change this template use File | Settings | File Templates.
  */
 public interface IRequestListener {
-    public void notifyEnd(FlickrXmlParser.ParsedResponse response);
+    public void notifyEnd(FlickrPhotoArray response);
 }

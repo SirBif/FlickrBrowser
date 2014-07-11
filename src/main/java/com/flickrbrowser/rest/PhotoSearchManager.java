@@ -2,10 +2,14 @@ package com.flickrbrowser.rest;
 
 import android.util.Log;
 import com.flickrbrowser.adapter.PhotoAdapter;
+import com.flickrbrowser.parcelable.PhotoResult;
 import com.flickrbrowser.parcelable.SearchResult;
 import com.flickrbrowser.util.FlickrBrowserConstants;
+import com.flickrbrowser.util.FlickrPhotoArray;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  Implements the logic used to retrieve the results of a user query, using an instance of SearchResult to keep track of the state
@@ -30,12 +34,12 @@ public class PhotoSearchManager implements IRequestListener {
     }
 
     @Override
-    public void notifyEnd(FlickrXmlParser.ParsedResponse parsedResponse) {
-        searchResult.addPhotos(parsedResponse.getPhotos());
+    public void notifyEnd(FlickrPhotoArray photos) {
+        searchResult.addPhotos(Arrays.asList(photos.getPhoto()));
         adapter.notifyDataSetChanged();
 
         if(searchResult.getNumberOfPages() == SearchResult.NO_PAGES_YET) {
-            searchResult.setNumberOfPages(parsedResponse.getPagesNumber());
+            searchResult.setNumberOfPages(photos.getPages());
         }
     }
 
