@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -77,7 +76,7 @@ public class BackgroundRequestManager {
         }
     }
 
-    protected static FlickrPhotoArray getPhotos(HttpGet request) throws IOException, InvalidStateException {
+    protected static FlickrPhotoArray getPhotos(HttpGet request) throws IOException, IllegalStateException {
         GenericConnection connection = new GenericConnection(request);
         Reader reader = null;
         try{
