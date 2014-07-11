@@ -20,6 +20,11 @@ public class SimpleLocation implements Parcelable{
         longitude = location.getLongitude();
     }
 
+    public SimpleLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public double getLongitude() {
         return longitude;
     }
@@ -68,4 +73,27 @@ public class SimpleLocation implements Parcelable{
             return new SimpleLocation[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o instanceof SimpleLocation == false) return false;
+
+        SimpleLocation sl = (SimpleLocation) o;
+        if(Double.compare(latitude, sl.latitude) != 0) return false;
+        if(Double.compare(longitude, sl.longitude) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 19;
+        long doubleFieldBits;
+        doubleFieldBits = Double.doubleToLongBits(latitude);
+        result = 31 * result + (int) (doubleFieldBits ^ (doubleFieldBits >>> 32));
+        doubleFieldBits = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (doubleFieldBits ^ (doubleFieldBits >>> 32));
+        return result;
+    }
 }

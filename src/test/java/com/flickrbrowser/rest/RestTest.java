@@ -2,6 +2,8 @@ package com.flickrbrowser.rest;
 
 import com.flickrbrowser.TestUtil;
 import com.flickrbrowser.parcelable.PhotoResult;
+import com.flickrbrowser.util.FlickrPhotoArray;
+import com.flickrbrowser.util.FlickrResponse;
 import junit.framework.Assert;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
@@ -11,7 +13,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +27,7 @@ public class RestTest {
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", TestUtil.getTestLocation(), 1);
         GenericConnection connection = new GenericConnection(request);
         String response = IOUtils.toString(connection.getStream());
-        Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+        Assert.assertTrue(response.contains("\"stat\":\"ok\""));
         connection.disconnect();
     }
 
@@ -35,7 +36,7 @@ public class RestTest {
         HttpGet request = FlickrRequestBuilder.createRequest("ferrara", null, 1);
         GenericConnection connection = new GenericConnection(request);
         String response = IOUtils.toString(connection.getStream());
-        Assert.assertTrue(response.contains("rsp stat=\"ok\""));
+        Assert.assertTrue(response.contains("\"stat\":\"ok\""));
         connection.disconnect();
     }
 
@@ -48,30 +49,30 @@ public class RestTest {
 
     @Test
     public void canParseResult() throws ParserConfigurationException {
-        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponse).getPhotos();
-        Assert.assertEquals(1, photos.size());
-        PhotoResult photo = photos.get(0);
-        Assert.assertEquals("Airone rosso", photo.getTitle());
+        PhotoResult[] photos = GsonHelper.fromJson(TestUtil.okHttpResponse, FlickrResponse.class).getPhotos().getPhoto();
+        Assert.assertEquals(1, photos.length);
+        PhotoResult photo = photos[0];
+        Assert.assertEquals("serbatoio dell' acqua - tank of water", photo.getTitle());
     }
 
     @Test
      public void canParseDescription() throws ParserConfigurationException {
-        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponse).getPhotos();
-        Assert.assertEquals(1, photos.size());
-        PhotoResult photo = photos.get(0);
-        Assert.assertEquals("airone", photo.getDescription());
+        PhotoResult[] photos = GsonHelper.fromJson(TestUtil.okHttpResponse, FlickrResponse.class).getPhotos().getPhoto();
+        Assert.assertEquals(1, photos.length);
+        PhotoResult photo = photos[0];
+        Assert.assertEquals("serbatoio", photo.getDescriptionString());
     }
 
     @Test
     public void parseDoesNotBreakWhenThereIsNoDescription() throws ParserConfigurationException {
-        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.okHttpResponseNoDescription).getPhotos();
-        Assert.assertEquals(1, photos.size());
-        PhotoResult photo = photos.get(0);
+        PhotoResult[] photos = GsonHelper.fromJson(TestUtil.okHttpResponseNoDescription, FlickrResponse.class).getPhotos().getPhoto();
+        Assert.assertEquals(1, photos.length);
+        PhotoResult photo = photos[0];
     }
 
     @Test
     public void badRequestGeneratesNoPhotos() throws ParserConfigurationException {
-        List<PhotoResult> photos = FlickrXmlParser.getParser().parseResponse(TestUtil.koHttpResponse).getPhotos();
-        Assert.assertEquals(0, photos.size());
+        FlickrPhotoArray photos = GsonHelper.fromJson(TestUtil.koHttpResponse, FlickrResponse.class).getPhotos();
+        Assert.assertNull(photos);
     }
 }

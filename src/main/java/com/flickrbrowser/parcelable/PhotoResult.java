@@ -14,22 +14,20 @@ public class PhotoResult implements Parcelable{
     private String farm;
     private String server;
     private String title;
-    private String description;
+    private Description description;
 
     public PhotoResult() {
 
     }
 
     public PhotoResult(Parcel in) {
-        String[] data= new String[7];
-        in.readStringArray(data);
-        id = data[0];
-        owner = data[1];
-        secret = data[2];
-        farm = data[3];
-        server = data[4];
-        title = data[5];
-        description = data[6];
+        id = in.readString();
+        owner = in.readString();
+        secret =in.readString();
+        farm = in.readString();
+        server = in.readString();
+        title = in.readString();
+        description = (Description) in.readValue(Description.class.getClassLoader());
     }
 
 
@@ -41,22 +39,24 @@ public class PhotoResult implements Parcelable{
         return "http://www.flickr.com/photos/" +owner +"/"+ id;
     }
 
+    public String getDescriptionString() {
+        return this.description != null ? this.description.toString() : null;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{
-                this.id,
-                this.owner,
-                this.secret,
-                this.farm,
-                this.server,
-                this.title,
-                this.description
-        });
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(id);
+        parcel.writeString(owner);
+        parcel.writeString(secret);
+        parcel.writeString(farm);
+        parcel.writeString(server);
+        parcel.writeString(title);
+        parcel.writeValue(description);
     }
 
     public static final Parcelable.Creator<PhotoResult> CREATOR= new Parcelable.Creator<PhotoResult>() {
@@ -111,20 +111,19 @@ public class PhotoResult implements Parcelable{
         this.title = title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getOwner() {
         return owner;
     }
 
+    public Description getDescription() {
+        return description;
+    }
+
+    public void setDescription(Description description) {
+        this.description = description;
+    }
 }

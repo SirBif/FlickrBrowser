@@ -28,7 +28,7 @@ public class ImageAdapter extends PhotoAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         RelativeLayout vi;
-        vi = (RelativeLayout) inflater.inflate(R.layout.listrow, null);
+        vi = (RelativeLayout) inflater.inflate(R.layout.listrow, parent);
 
         TextView title = (TextView)vi.findViewById(R.id.display_title);
         TextView desc = (TextView)vi.findViewById(R.id.display_description);
@@ -37,7 +37,7 @@ public class ImageAdapter extends PhotoAdapter {
         PhotoResult photo = photos.get(position);
 
         title.setText(Utils.niceString(photo.getTitle()));
-        desc.setText(Utils.niceString(photo.getDescription()));
+        desc.setText(Utils.niceString(photo.getDescriptionString()));
         imageLoader.displayImage(photo.getUrl(PhotoSize.SMALL_SQUARE), thumb_image);
         return vi;
     }
